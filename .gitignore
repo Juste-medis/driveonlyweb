@@ -1,0 +1,120 @@
+/var/cache/*
+!/var/cache/.gitkeep
+/var/logs/*
+!/var/logs/.gitkeep
+# gitkeep 
+
+# Symfony cache (PS 1.7+)
+
+/app/cache/*
+!/app/cache/.gitkeep
+/app/logs/*
+!/app/logs/.gitkeep
+
+# --- Configuration (environment specific) ---
+
+/app/config/parameters.php
+/app/config/parameters.yml
+/app/config/parameters.yml.dist
+
+# Modern env files
+
+.env
+.env.local
+.env.*.local
+/localization/
+
+# --- Uploads / user content ---
+
+/img/*
+!/img/index.php
+/download/*
+!/download/index.php
+/upload/*
+!/upload/index.php
+
+# --- Generated files ---
+
+/config/settings.inc.php
+/config/defines.inc.php
+/config/xml/*.xml
+
+# --- Composer ---
+
+/vendor/
+
+# If you prefer committing vendor (not recommended), comment above line
+
+# --- Node / front assets ---
+
+/node_modules/
+/themes/*/assets/cache/*
+/themes/*/assets/dist/*
+
+# --- Build artifacts ---
+
+/build/
+/dist/
+
+# --- IDE / OS files ---
+
+.DS_Store
+Thumbs.db
+
+# VSCode
+
+.vscode/
+
+# PHPStorm / IntelliJ
+
+.idea/
+
+# --- Logs ---
+
+*.log
+*.scss
+*map.js
+/js/tiny_mce/
+/js/jquery/
+/js/cropper/
+/js/vendor/
+
+# --- Docker ---
+
+docker-compose.override.yml
+
+# --- Backup files ---
+
+*.sql
+*.zip
+*.tar.gz
+
+# --- PHPUnit ---
+
+/phpunit.xml
+
+# --- Misc ---
+
+*.swp
+*.bak
+*.tmp
+
+.htaccess
+.htpasswd
+tmp/
+
+.php-ini 
+/modules
+/src
+#!/modules/cucustome
+
+/admin403aeargf/backups/*
+/admin403aeargf/themes/*/img/
+/admin403aeargf/filemanager/
+/admin403aeargf/import/*
+/app/Resources/geoip/
+/app/Resources/translations/hi-IN
+/app/Resources/translations/de-DE
+/docs
+/themes/*
+!/themes/autostore

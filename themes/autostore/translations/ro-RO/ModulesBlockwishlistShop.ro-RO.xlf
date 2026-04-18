@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="back" source-language="ro-RO" target-language="ro-RO" datatype="plaintext">
+    <body>
+      <trans-unit id="3b00ce22928408e9779186c6fe7fac8a">
+        <source>Wishlist</source>
+        <target>Lista de dorințe</target>
+        <note>Line: 46</note>
+      </trans-unit>
+      <trans-unit id="bdbbfbe4e0997752ebe7eba30877aedd" approved="yes">
+        <source>Return to your account</source>
+        <target state="final">Inapoi la contul tau</target>
+        <note>Line: 45</note>
+      </trans-unit>
+      <trans-unit id="5a95a425f74314a96f13a2f136992178" approved="yes">
+        <source>Share</source>
+        <target state="final">Distribuiti</target>
+        <note>Line: 31</note>
+      </trans-unit>
+      <trans-unit id="904a8304056d77e4547744781b7ceb50" approved="yes">
+        <source>Rename</source>
+        <target state="final">Redenumeste</target>
+        <note>Line: 30</note>
+      </trans-unit>
+      <trans-unit id="82054609912d58a02bb33689605dc235" approved="yes">
+        <source>No wishlist found.</source>
+        <target state="final">Nu a fost gasita nicio lista de dorinte.</target>
+        <note>Line: 29</note>
+      </trans-unit>
+      <trans-unit id="30ca097d6f7ac158bc3d02dfb18979a1" approved="yes">
+        <source>You need to be logged in to save products in your wishlist.</source>
+        <target state="final">Ai nevoie sa fii autentificat pentru a salva produsele in lista de dorinte.</target>
+        <note>Line: 49</note>
+      </trans-unit>
+      <trans-unit id="b6d4223e60986fa4c9af77ee5f7149c5" approved="yes">
+        <source>Sign in</source>
+        <target state="final">Autentificare</target>
+        <note>Line: 37</note>
+      </trans-unit>
+      <trans-unit id="3f122c673ce2e03b7ed71889b17ec119" approved="yes">
+        <source>Rename wishlist</source>
+        <target state="final">Redenumeste lista de dorinte</target>
+        <note>Line: 26</note>
+      </trans-unit>
+      <trans-unit id="ff54fda7befc2debddd893cb7bc65c68" approved="yes">
+        <source>List title is too short</source>
+        <target state="final">Titlul listei este prea scurt</target>
+        <note>Line: 28</note>
+      </trans-unit>
+      <trans-unit id="31b920bfe179e602e215842387ab8feb" approved="yes">
+        <source>Add name</source>
+        <target state="final">Adauga un nume</target>
+        <note>Line: 25</note>
+      </trans-unit>
+      <trans-unit id="972d48662f3cf5d0514a3cbba209837a" approved="yes">
+        <source>Wishlist name</source>
+        <target state="final">Numele listei de dorinte</target>
+        <note>Line: 24</note>
+      </trans-unit>
+      <trans-unit id="2f745c01f53c6a617fbff3bc18028e33" approved="yes">
+        <source>Create wishlist</source>
+        <target state="final">Creeaza o lista de dorinte</target>
+        <note>Line: 27</note>
+      </trans-unit>
+      <trans-unit id="31323452eb311e8fbef81c75d3062659" approved="yes">
+        <source>No list found.</source>
+        <target state="final">Nu a fost gasita nicio lista.</target>
+        <note>Line: 58</note>
+      </trans-unit>
+      <trans-unit id="2d96bb66d8541a89620d3c158ceef42b" approved="yes">
+        <source>Add to wishlist</source>
+        <target state="final">Adauga la lista dorintelor</target>
+        <note>Line: 37</note>
+      </trans-unit>
+      <trans-unit id="f2a6c498fb90ee345d997f888fce3b18" approved="yes">
+        <source>Delete</source>
+        <target state="final">Sterge</target>
+        <note>Line: 33</note>
+      </trans-unit>
+      <trans-unit id="1063e38cb53d94d386f21227fcd84717" approved="yes">
+        <source>Remove</source>
+        <target state="final">Elimina</target>
+        <note>Line: 32</note>
+      </trans-unit>
+      <trans-unit id="7bd9ca3a2784a710caef154068db87b8" approved="yes">
+        <source>The product will be removed from "%nameofthewishlist%".</source>
+        <target state="final">Produsul va fi eliminat din „%nameofthewishlist%”.</target>
+        <note>Line: 30</note>
+      </trans-unit>
+      <trans-unit id="1beb403d31c2e510c90d78c71460c088" approved="yes">
+        <source>Delete wishlist</source>
+        <target state="final">Sterge lista de dorinte</target>
+        <note>Line: 29</note>
+      </trans-unit>
+      <trans-unit id="a1cfe7cbeafd513db812282da3f01704" approved="yes">
+        <source>Remove product from wishlist</source>
+        <target state="final">Elimina produsul din lista de dorinte</target>
+        <note>Line: 28</note>
+      </trans-unit>
+      <trans-unit id="b603b043e8b03095685f200bdd8b2283" approved="yes">
+        <source>Copy text</source>
+        <target state="final">Copiaza text</target>
+        <note>Line: 27</note>
+      </trans-unit>
+      <trans-unit id="ea4788705e6873b424c65e91c2846b19" approved="yes">
+        <source>Cancel</source>
+        <target state="final">Anuleaza</target>
+        <note>Line: 31</note>
+      </trans-unit>
+      <trans-unit id="50f67a17a3a4c58de43d4b9abf7ccab7" approved="yes">
+        <source>Share link</source>
+        <target state="final">Link de partajare</target>
+        <note>Line: 25</note>
+      </trans-unit>
+      <trans-unit id="6d6db52799620de23c1e87d00abde8c4" approved="yes">
+        <source>Copied!</source>
+        <target state="final">Copiat!</target>
+        <note>Line: 24</note>
+      </trans-unit>
+      <trans-unit id="8f02ed5e74022ada127d2bd206049a36" approved="yes">
+        <source>Share wishlist</source>
+        <target state="final">Partajeaza lista de dorinte</target>
+        <note>Line: 23</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

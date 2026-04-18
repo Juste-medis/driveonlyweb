@@ -1,0 +1,15 @@
+{shop_url}
+
+Bonjour {firstname} {lastname},
+
+Identifiant de commande {order_name} - Remboursement effectué
+
+We have processed your refund for your order with the reference {order_name} from {shop_name}.
+
+Suivez votre commande et téléchargez votre facture sur notre site, rendez-vous dans la section [Historique et détails de mes commandes]({history_url}) de votre compte client.
+
+Si vous avez un compte invité, vous pouvez suivre votre commande via la section [Suivi invité]({guest_tracking_url}) sur notre boutique.
+
+[{shop_name}]({shop_url})
+
+Powered by [PrestaShop](http://www.prestashop.com/)

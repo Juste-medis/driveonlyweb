@@ -1,0 +1,15 @@
+{shop_url}
+
+Bonjour {firstname} {lastname},
+
+SAV - Discussion transférée
+
+{employee} wanted to forward this discussion to you.
+
+Historique de la discussion : {messages}
+
+{employee} added {comment}
+
+[{shop_name}]({shop_url})
+
+Powered by [PrestaShop](http://www.prestashop.com/)

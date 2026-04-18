@@ -1,0 +1,4 @@
+SELECT c.`id_category`, c.`id_parent`
+FROM `ps_category` c
+LEFT JOIN `ps_category_shop` `cs` ON c.`id_category` = cs.`id_category` AND cs.`id_shop` = 1
+ORDER BY c.`id_parent`, cs.`position` ASC

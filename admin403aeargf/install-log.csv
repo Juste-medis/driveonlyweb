@@ -1,0 +1,130 @@
+DATETIME,ERRORLEVEL,TAG,VALUE,LINE,FILE
+"2021-10-19 20:15:40",INFO,--,"Order state: cancelled",127,/home/clients/f624c80ceaadd02ea2c564a7dbba9dc1/www/modules/payplug/src/repositories/OrderStateRepository.php
+"2021-10-19 20:15:40",INFO,--,"Order state: cancelled - test",127,/home/clients/f624c80ceaadd02ea2c564a7dbba9dc1/www/modules/payplug/src/repositories/OrderStateRepository.php
+"2021-10-19 20:15:40",INFO,--,"Creating new order state.",78,/home/clients/f624c80ceaadd02ea2c564a7dbba9dc1/www/modules/payplug/src/repositories/OrderStateRepository.php
+"2021-10-19 20:15:40",INFO,--,"State created with id: 59",110,/home/clients/f624c80ceaadd02ea2c564a7dbba9dc1/www/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: paid - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 64",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: refund",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 65",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: refund - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 66",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: pending",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 67",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: pending - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 68",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: error",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 69",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: error - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 70",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: cancelled - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 71",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: auth",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 72",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: auth - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 73",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: exp",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 74",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: exp - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 75",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: oney_pg",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 76",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Order state: oney_pg - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-07-27 01:53:01",INFO,--,"State created with id: 77",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/p18/modules/payplug/src/repositories/OrderStateRepository.php
+"2022-08-03 13:24:59",INFO,--,"Starting to uninstall.",516,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/payplug/src/repositories/InstallRepository.php
+"2022-08-03 13:24:59",INFO,--,"Saved cards will be deleted.",520,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/payplug/src/repositories/InstallRepository.php
+"2022-08-03 13:24:59",INFO,--,"Saved cards successfully deleted.",526,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/payplug/src/repositories/InstallRepository.php
+"2022-08-03 13:24:59",INFO,--,"Uninstall succeeded.",543,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/payplug/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Starting to install again.",251,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: paid - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 78",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: paid",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: refund - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 79",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: refund",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: pending - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 80",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: pending",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 81",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: error - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 82",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: error",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: cancelled - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 83",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: cancelled",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: auth - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 84",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: auth",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 85",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: exp - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 86",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: exp",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 87",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: oney_pg - test",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 88",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Order state: oney_pg",133,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Creating new order state.",84,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"State created with id: 89",116,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/OrderStateRepository.php
+"2022-12-18 15:57:44",INFO,--,"Execute createOrderStatesType",159,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Live key : PSPAYLATER_ORDER_STATE_PAID / Id Order State: 2",165,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: paid - result: ok",168,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Sandbox key : PSPAYLATER_ORDER_STATE_PAID_TEST / Id Order State: 78",174,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: paid - result: ok",177,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Live key : PSPAYLATER_ORDER_STATE_REFUND / Id Order State: 7",165,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: refund - result: ok",168,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Sandbox key : PSPAYLATER_ORDER_STATE_REFUND_TEST / Id Order State: 79",174,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: refund - result: ok",177,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Live key : PSPAYLATER_ORDER_STATE_PENDING / Id Order State: 81",165,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: pending - result: ok",168,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Sandbox key : PSPAYLATER_ORDER_STATE_PENDING_TEST / Id Order State: 80",174,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: pending - result: ok",177,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Live key : PSPAYLATER_ORDER_STATE_ERROR / Id Order State: 8",165,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: error - result: ok",168,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Sandbox key : PSPAYLATER_ORDER_STATE_ERROR_TEST / Id Order State: 82",174,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: error - result: ok",177,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Live key : PSPAYLATER_ORDER_STATE_CANCELLED / Id Order State: 6",165,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: cancelled - result: ok",168,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Sandbox key : PSPAYLATER_ORDER_STATE_CANCELLED_TEST / Id Order State: 83",174,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: cancelled - result: ok",177,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Live key : PSPAYLATER_ORDER_STATE_AUTH / Id Order State: 85",165,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: pending - result: ok",168,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Sandbox key : PSPAYLATER_ORDER_STATE_AUTH_TEST / Id Order State: 84",174,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: pending - result: ok",177,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Live key : PSPAYLATER_ORDER_STATE_EXP / Id Order State: 87",165,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: expired - result: ok",168,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Sandbox key : PSPAYLATER_ORDER_STATE_EXP_TEST / Id Order State: 86",174,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: expired - result: ok",177,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Live key : PSPAYLATER_ORDER_STATE_ONEY_PG / Id Order State: 89",165,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: pending - result: ok",168,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Sandbox key : PSPAYLATER_ORDER_STATE_ONEY_PG_TEST / Id Order State: 88",174,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Save type: pending - result: ok",177,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2022-12-18 15:57:44",INFO,--,"Install successful.",295,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2023-01-19 23:47:01",INFO,--,"Starting to uninstall.",373,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2023-01-19 23:47:01",INFO,--,"Saved cards will be deleted.",377,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2023-01-19 23:47:01",INFO,--,"Saved cards successfully deleted.",383,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
+"2023-01-19 23:47:01",INFO,--,"Uninstall succeeded.",400,/home/clients/8dfd3d72453d30da4424ba67285644dd/www/modules/pspaylater/src/repositories/InstallRepository.php
