@@ -23,6 +23,7 @@ use DoVehicle\Repository\VehicleModelRepository;
 use DoVehicle\Repository\VehicleEngineRepository;
 use DoVehicle\Repository\ProductFamilyRepository;
 use DoVehicle\Repository\ProductCompatibilityRepository;
+use DoVehicle\Repository\CategoryFiltersRepository;
 use DoVehicle\Service\VehicleService;
 use DoVehicle\FormHandler\ProductVehicleFormHandler;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -47,8 +48,12 @@ class Dovehicle extends Module
         'displayTop',
         'displayHeader',
         'displayFooter',
+        // 'displayCategoryHeader',
+        "displayLeftColumn",
         // Nav
         'moduleRoutes',
+        //Search
+        'filterProductSearch'
     ];
 
     public function __construct()
@@ -75,23 +80,189 @@ class Dovehicle extends Module
         return parent::install()
             && $this->installSql()
             && $this->registerHooks()
+            && $this->setHookPosition('displayLeftColumn', 0)
             && $this->installTab();
     }
 
     public function uninstall(): bool
     {
         return parent::uninstall()
-            && $this->uninstallSql()
+            // && $this->uninstallSql()
             && $this->uninstallTab();
     }
+
+    public function hookdisplayLeftColumn($params)
+    {
+        try { 
+            $categoryVar = $this->context->smarty->getTemplateVars()['category']?? null;
+  
+            if ($categoryVar) { 
+   $idCategory = (int) $categoryVar["id"];
+      } elseif (
+                $this->context->controller->getPageType() === 'category'
+            ) {
+                $category = $this->context->controller->getCategory();
+                if ($category instanceof \Category) {
+                    $idCategory = (int) $category->id;
+                }
+            }
+
+            if (!$idCategory) {
+                return '';
+            }
+
+            $filtersRepo = new CategoryFiltersRepository();
+            $idLang = (int) $this->context->language->id;
+
+                                           Utils::log($idCategory);
+
+            // Récupérer attributs et caractéristiques
+            $attributes = $filtersRepo->getAttributesWithValuesByCategory($idCategory, $idLang);
+            $features = $filtersRepo->getFeaturesByCategory($idCategory, $idLang);
+
+            // Passer les données au template
+            $dataassign = [
+                'dovehicle_attributes' => $attributes,
+                'dovehicle_features'   => $features,
+                'dovehicle_id_category' => $idCategory,
+                'dovehicle_ajax_url'   => $this->context->link->getModuleLink('dovehicle', 'filters'),
+            ];
+            $this->context->smarty->assign( $dataassign );
+        Utils::log($dataassign);
+
+            return $this->display(__FILE__, 'views/templates/front/display_filters.twig');
+        } catch (\Exception $e) {
+            \DoVehicle\Tools\Utils::log("ERREUR dans hookdisplayLeftColumn: " . $e->getMessage());
+            //stack trace complète dans les logs pour debug
+            Utils::log($e->getTraceAsString());
+
+            return '';
+        }
+    }
+ 
+public function hookFilterProductSearch($params)
+{
+    $searchQuery = $_GET;
+
+    $idCategory      = (int) ($searchQuery['id_category'] ?? 0);
+    $idLang          = (int) ($searchQuery['id_lang'] ?? (int) Context::getContext()->language->id);
+    $attributeIds    = isset($searchQuery['attributes']) ? array_map('intval', (array) $searchQuery['attributes']) : [];
+    $featureValueIds = isset($searchQuery['features'])   ? array_map('intval', (array) $searchQuery['features'])   : [];
+
+    if (!$idCategory || (empty($attributeIds) && empty($featureValueIds))) {
+        return;
+    }
+
+    $productIds = $this->getFilteredProductIds($idCategory, $attributeIds, $featureValueIds);
+
+    // On injecte les IDs dans le contexte pour que le controller category les utilise
+    // PS 1.7 : on surcharge via hook actionProductSearchProviderRunQueryBefore
+    // ou on passe par assignation Smarty + JS selon votre architecture
+    Context::getContext()->smarty->assign([
+        'dovehicle_filtered_ids'   => $productIds,
+        'dovehicle_filtered_count' => count($productIds),
+    ]);
+}
+
+/**
+ * Retourne les IDs produits correspondant aux filtres attributs ET features
+ * Logique : intersection (AND entre groupes, OR au sein d'un groupe)
+ *
+ * Exemple :
+ *   attributeIds    = [1053, 1011]  → produits ayant l'attr 1053 OU 1011
+ *   featureValueIds = [208]         → ET ayant la feature_value 208
+ */
+private function getFilteredProductIds(
+    int   $idCategory,
+    array $attributeIds,
+    array $featureValueIds
+): array {
+    $db = Db::getInstance();
+    $ps = _DB_PREFIX_;
+
+    // ── Étape 1 : scope produits actifs de la catégorie (récursif) ──────────
+    // On réutilise la même CTE que getCategoryFiltersSummary
+    $db->execute('SET SESSION group_concat_max_len = 1000000');
+
+    // ── Étape 2 : construire la requête d'intersection ───────────────────────
+    // Stratégie :
+    //   - Pour les attributs   : un produit doit avoir AU MOINS UN des id_attribute sélectionnés
+    //   - Pour les features    : un produit doit avoir AU MOINS UNE des id_feature_value sélectionnées
+    //   - Entre les deux blocs : ET (intersection)
+    //
+    // Si on veut un AND strict par groupe d'attributs (ex : Couleur=Rouge ET Taille=XL),
+    // remplacer le HAVING par autant de EXISTS qu'il y a de groupes distincts.
+
+    $sql = '
+        WITH RECURSIVE category_branch AS (
+            SELECT c.id_category
+            FROM `' . $ps . 'category` c
+            WHERE c.id_category = ' . $idCategory . '
+              AND c.active = 1
+
+            UNION ALL
+
+            SELECT c.id_category
+            FROM `' . $ps . 'category` c
+            INNER JOIN category_branch cb ON cb.id_category = c.id_parent
+            WHERE c.active = 1
+        ),
+
+        product_scope AS (
+            SELECT DISTINCT cp.id_product
+            FROM `' . $ps . 'category_product` cp
+            INNER JOIN category_branch cb ON cb.id_category = cp.id_category
+            INNER JOIN `' . $ps . 'product` p ON p.id_product = cp.id_product AND p.active = 1
+        )
+
+        SELECT ps.id_product
+        FROM product_scope ps
+        WHERE 1=1
+    ';
+
+    // ── Filtre attributs ────────────────────────────────────────────────────
+    if (!empty($attributeIds)) {
+        $placeholders = implode(',', $attributeIds);
+        $sql .= '
+        AND EXISTS (
+            SELECT 1
+            FROM `' . $ps . 'product_attribute` pa
+            INNER JOIN `' . $ps . 'product_attribute_combination` pac
+                ON pac.id_product_attribute = pa.id_product_attribute
+            WHERE pa.id_product = ps.id_product
+              AND pac.id_attribute IN (' . $placeholders . ')
+        )';
+    }
+
+    // ── Filtre features ─────────────────────────────────────────────────────
+    if (!empty($featureValueIds)) {
+        $placeholders = implode(',', $featureValueIds);
+        $sql .= '
+        AND EXISTS (
+            SELECT 1
+            FROM `' . $ps . 'feature_product` fp
+            WHERE fp.id_product = ps.id_product
+              AND fp.id_feature_value IN (' . $placeholders . ')
+        )';
+    }
+
+    $resource = $db->query($sql);
+
+    if (!$resource) {
+        return [];
+    }
+
+    $rows = $resource->fetchAll(\PDO::FETCH_ASSOC);
+
+    return array_column($rows, 'id_product');
+} 
 
     public function hookDisplayAdminProductsMainStepLeftColumnBottom($params)
     {
         try {
             $idProduct = isset($params['id_product']) ? (int) $params['id_product'] : 0;
 
-            Utils::log("HOOK hookDisplayAdminProductsMainStepLeftColumnBottom appelé pour produit ID: " . $idProduct);
-
+ 
             // Récupérer les repositories
             $modelRepo   = new VehicleModelRepository();
             $familyRepo  = new ProductFamilyRepository();
@@ -103,8 +274,7 @@ class Dovehicle extends Module
             $allFamilies      = $familyRepo->findAllFlat();
             $manufacturers    = $this->getManufacturerList();
 
-            Utils::log("Compats trouvées: " . count($existingCompats));
-
+ 
             // Assigner les variables Smarty
             $this->context->smarty->assign([
                 'dovehicle_manufacturers'    => $manufacturers,
@@ -119,8 +289,7 @@ class Dovehicle extends Module
                 "module_dir"        => $this->_path,
             ]);
 
-            Utils::log("Hook hookDisplayAdminProductsMainStepLeftColumnBottom complété avec succès");
-
+ 
             // Rendre et retourner le template Smarty
             return $this->display(__FILE__, 'views/templates/hook/product_vehicle_tab.tpl');
         } catch (\Exception $e) {
@@ -358,18 +527,14 @@ class Dovehicle extends Module
             // Récupérer les données depuis POST (champs hidden du formulaire)
             $compatJson   = Tools::getValue('product.dovehicle_compat_json', '[]');
             $familiesJson = Tools::getValue('product.dovehicle_families_json', '[]');
-
-            Utils::log("Saving DoVehicle data for product ID: " . $idProduct);
-            Utils::log("Compat JSON: " . substr($compatJson, 0, 50) . "...");
-
+ 
             $compats   = json_decode($compatJson, true)   ?: [];
             $families  = json_decode($familiesJson, true) ?: [];
 
             $handler->saveCompatibilities($idProduct, $compats);
             $handler->saveFamilyLinks($idProduct, $families);
 
-            Utils::log("DoVehicle data saved successfully. Compats: " . count($compats) . ", Families: " . count($families));
-        } catch (\Exception $e) {
+         } catch (\Exception $e) {
             Utils::log("ERROR in saveVehicleData: " . $e->getMessage());
         }
     }
@@ -382,8 +547,16 @@ class Dovehicle extends Module
     {
         // Chargement JS + CSS FO sur toutes les pages
         $this->context->controller->addJS($this->_path . 'views/js/fo_vehicle.js');
-        $this->context->controller->addCSS($this->_path . 'views/css/fo_vehicle.css');
-
+        $this->context->controller->addCSS($this->_path . 'views/css/fo_vehicle.css'); 
+        $this->context->controller->registerJavascript(
+        'mon-script-custom',
+        'modules/' . $this->name . '/views/js/filters.js',
+            [
+                'position' => 'bottom',
+                'priority' => 150,
+                'version' => filemtime(_PS_MODULE_DIR_.$this->name.'/views/js/filters.js'),
+            ]
+        );
         return '';
     }
 
@@ -511,5 +684,21 @@ class Dovehicle extends Module
     {
         $container = $this->context->controller->getContainer();
         return $container->get($serviceId);
+    }
+
+    private function setHookPosition($hookName, $position)
+    {
+        $idHook = Hook::getIdByName($hookName);
+        $idModule = (int) $this->id;
+
+        if (!$idHook) {
+            return false;
+        }
+
+        return Db::getInstance()->update(
+            'hook_module',
+            ['position' => (int) $position],
+            'id_module = ' . $idModule . ' AND id_hook = ' . (int) $idHook
+        );
     }
 }

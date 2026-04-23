@@ -44,7 +44,7 @@ $(document).ready(() => {
         productModal.remove();
       });
     }).fail((resp) => {
-      prestashop.emit('handleError', {eventType: 'clickQuickView', resp: resp});
+      prestashop.emit('handleError', { eventType: 'clickQuickView', resp: resp });
     });
   });
 
@@ -149,7 +149,7 @@ $(document).ready(() => {
   });
 });
 
-function updateProductListDOM (data) {
+function updateProductListDOM(data) {
   $('#search_filters').replaceWith(data.rendered_facets);
   $('#js-active-search-filters').replaceWith(data.rendered_active_filters);
   $('#js-product-list-top').replaceWith(data.rendered_products_top);

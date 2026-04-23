@@ -1,0 +1,224 @@
+{**
+ * MODULE DOVEHICLE — Affichage des filtres attributs/caractéristiques
+ * Réutilise les classes CSS du thème autostore
+ *}
+
+{if $dovehicle_attributes|count > 0 || $dovehicle_features|count > 0}
+<div id="dovehicle_filters" class="dovehicle-filters">
+    <style>
+       .ps-shown-by-js{
+           text-shadow: none !important;
+            border: 2px solid #000;
+
+       } 
+       .onecheck.ps-shown-by-js { 
+}
+.dovehicle-filter-attr, .dovehicle-filter-feature {
+            border: 2px solid #000;
+
+}
+
+.facet-title {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.dovehicle-attribute-name{
+    font-weight: 500;
+
+}
+.magnitude {
+    font-size: 0.9em;
+    margin-left: 5px;
+    font-weight: normal;
+    font-style: italic;
+}
+.do-vehicle-facets-wrapper{ 
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.4;
+    font-size: 15px;
+    font-weight: 400;
+    color: #333;
+    font-family: "Montserrat",sans-serif;    
+    transition: border-color .4s,transform .4s,box-shadow .4s,-webkit-transform .4s,-o-transform .4s,-webkit-box-shadow .4s;
+    position: relative;
+    z-index: 1;
+    transform: translate(0px);
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 0px; 
+
+}
+    </style>
+    <p class="text-uppercase h6 hidden-md-down">Filtres produits</p>
+    
+    <div class="do-vehicle-facets-wrapper">
+        {* ─── ATTRIBUTS (Variantes produit) ─── *}
+        
+
+
+{foreach from=$dovehicle_attributes item="attributeGroup" name="attributes"}
+
+    {if $attributeGroup.attributes|count == 1
+        && $attributeGroup.attributes[0].value|lower == 'oui'}
+
+        <div class="facet clearfix{if $smarty.foreach.attributes.last && $dovehicle_features|count == 0} last{/if}">
+            <ul class="facet-list">
+                <li>
+                    <label class="facet-label">
+                        <span class="custom-checkbox">
+                            <input
+                                type="checkbox"
+                                class="dovehicle-filter-attr"
+                                value="{$attributeGroup.attributes[0].id_attribute}"
+                                data-filter-type="attribute"
+                            >
+                            <span class="onecheck ps-shown-by-js">
+                                <i class="material-icons checkbox-checked">&#xE5CA;</i>
+                            </span>
+                        </span>
+                        <span class="_gray-darker">
+                            <span class="dovehicle-attribute-name"> {$attributeGroup.group_name}</span>
+                            <span class="magnitude">({$attributeGroup.attributes[0].count})</span>
+                        </span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+    {else}
+
+        <div class="facet clearfix{if $smarty.foreach.attributes.last && $dovehicle_features|count == 0} last{/if}">
+            <p class="facet-title hidden-md-down">{$attributeGroup.group_name}</p>
+
+            {assign var=_expand_id value=10|mt_rand:100000}
+            {assign var=_collapse value=true}
+
+            <div class="title hidden-lg-up" data-target="#dovehicle_facet_{$_expand_id}" data-toggle="collapse"{if !$_collapse} aria-expanded="true"{/if}>
+                <p class="h6">{$attributeGroup.group_name}</p>
+                <span class="pull-xs-right">
+                    <span class="navbar-toggler collapse-icons">
+                        <i class="material-icons add">&#xE313;</i>
+                        <i class="material-icons remove">&#xE316;</i>
+                    </span>
+                </span>
+            </div>
+            <div id="dovehicle_facet_{$_expand_id}" class="in">
+                <ul class="facet-list">
+                    {foreach from=$attributeGroup.attributes item="attribute"}
+                        <li>
+                            <label class="facet-label">
+                                <span class="custom-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        class="dovehicle-filter-attr"
+                                        value="{$attribute.id_attribute}"
+                                        data-filter-type="attribute"
+                                    >
+                                    <span class="ps-shown-by-js">
+                                        <i class="material-icons checkbox-checked">&#xE5CA;</i>
+                                    </span>
+                                </span>
+                                <span class="_gray-darker">
+                                    <span class="dovehicle-attribute-name"> {$attribute.value}</span>
+                                    <span class="magnitude">({$attribute.count})</span>
+                                </span>
+                            </label>
+                        </li>
+                    {/foreach}
+                </ul>
+            </div>
+        </div>
+
+    {/if}
+
+{/foreach}
+
+{foreach from=$dovehicle_features item="feature" name="features"}
+
+    {if $feature.values|count == 1
+        && $feature.values[0].value|lower == 'oui'}
+
+        <div class="facet clearfix{if $smarty.foreach.features.last} last{/if}">
+            <ul class="facet-list">
+                <li>
+                    <label class="facet-label">
+                        <span class="custom-checkbox">
+                            <input
+                                type="checkbox"
+                                class="dovehicle-filter-feature"
+                                value="{$feature.values[0].id_feature_value}"
+                                data-filter-type="feature"
+                            >
+                            <span class="onecheck ps-shown-by-js">
+                                <i class="material-icons checkbox-checked">&#xE5CA;</i>
+                            </span>
+                        </span>
+                        <span class="_gray-darker">
+                            <span class="dovehicle-attribute-name"> {$feature.feature_name}</span>
+                            <span class="magnitude">({$feature.values[0].count})</span>
+                        </span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+    {else}
+
+        <div class="facet clearfix{if $smarty.foreach.features.last} last{/if}">
+            <p class="facet-title hidden-md-down">{$feature.feature_name}</p>
+
+            {assign var=_expand_id value=10|mt_rand:100000}
+            {assign var=_collapse value=true}
+
+            <div class="title hidden-lg-up" data-target="#dovehicle_facet_{$_expand_id}" data-toggle="collapse"{if !$_collapse} aria-expanded="true"{/if}>
+                <p class="h6">{$feature.feature_name}</p>
+                <span class="pull-xs-right">
+                    <span class="navbar-toggler collapse-icons">
+                        <i class="material-icons add">&#xE313;</i>
+                        <i class="material-icons remove">&#xE316;</i>
+                    </span>
+                </span>
+            </div>
+
+            <div id="dovehicle_facet_{$_expand_id}" class="in">
+                <ul class="facet-list">
+                    {foreach from=$feature.values item="value"}
+                        <li>
+                            <label class="facet-label">
+                                <span class="custom-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        class="dovehicle-filter-feature"
+                                        value="{$value.id_feature_value}"
+                                        data-filter-type="feature"
+                                    >
+                                    <span class="ps-shown-by-js">
+                                        <i class="material-icons checkbox-checked">&#xE5CA;</i>
+                                    </span>
+                                </span>
+                                <span class="_gray-darker">
+                                   <span class="dovehicle-attribute-name">   {$value.value} </span>
+                                    <span class="magnitude">({$value.count})</span>
+                                </span>
+                            </label>
+                        </li>
+                    {/foreach}
+                </ul>
+            </div>
+        </div>
+
+    {/if}
+
+{/foreach}
+
+
+
+
+
+
+
+
+    </div>
+</div>
+{/if}

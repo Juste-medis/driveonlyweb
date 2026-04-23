@@ -1,0 +1,89 @@
+WITH RECURSIVE category_branch AS (
+    SELECT
+        c.id_category,
+        c.id_parent,
+        cl.name AS category_name,
+        CAST(cl.name AS CHAR(2000)) AS path
+    FROM ps_category c
+    JOIN ps_category_lang cl
+        ON cl.id_category = c.id_category
+       AND cl.id_lang = 1
+       AND cl.id_shop = 1
+    WHERE c.id_category = 10992
+      AND c.active = 1
+
+    UNION ALL
+
+    SELECT
+        c.id_category,
+        c.id_parent,
+        cl.name AS category_name,
+        CONCAT(cb.path, ' > ', cl.name) AS path
+    FROM ps_category c
+    JOIN ps_category_lang cl
+        ON cl.id_category = c.id_category
+       AND cl.id_lang = 1
+       AND cl.id_shop = 1
+    JOIN category_branch cb
+        ON cb.id_category = c.id_parent
+    WHERE c.active = 1
+),
+
+product_scope AS (
+    SELECT DISTINCT
+        p.id_product
+    FROM category_branch cb
+    JOIN ps_category_product cp
+        ON cp.id_category = cb.id_category
+    JOIN ps_product p
+        ON p.id_product = cp.id_product
+),
+
+features_agg AS (
+    SELECT
+        GROUP_CONCAT(
+            DISTINCT CONCAT(fl.name, ' = ', fvl.value)
+            ORDER BY fl.name, fvl.value
+            SEPARATOR ' || '
+        ) AS caracteristiques
+    FROM product_scope ps
+    JOIN ps_feature_product fp
+        ON fp.id_product = ps.id_product
+    JOIN ps_feature_lang fl
+        ON fl.id_feature = fp.id_feature
+       AND fl.id_lang = 1
+    JOIN ps_feature_value_lang fvl
+        ON fvl.id_feature_value = fp.id_feature_value
+       AND fvl.id_lang = 1
+),
+
+declinations_agg AS (
+    SELECT
+        GROUP_CONCAT(
+            DISTINCT CONCAT(agl.name, ' = ', al.name)
+            ORDER BY agl.name, al.name
+            SEPARATOR ' || '
+        ) AS declinaisons
+    FROM product_scope ps
+    JOIN ps_product_attribute pa
+        ON pa.id_product = ps.id_product
+    JOIN ps_product_attribute_combination pac
+        ON pac.id_product_attribute = pa.id_product_attribute
+    JOIN ps_attribute a
+        ON a.id_attribute = pac.id_attribute
+    JOIN ps_attribute_lang al
+        ON al.id_attribute = a.id_attribute
+       AND al.id_lang = 1
+    JOIN ps_attribute_group_lang agl
+        ON agl.id_attribute_group = a.id_attribute_group
+       AND agl.id_lang = 1
+),
+ 
+
+SELECT
+    10992 AS id_category,
+    (SELECT path FROM category_branch LIMIT 1) AS category_path,
+    (SELECT COUNT(*) FROM product_scope) AS nb_produits,
+    COALESCE((SELECT caracteristiques FROM features_agg), '') AS caracteristiques,
+    COALESCE((SELECT declinaisons FROM declinations_agg), '') AS declinaisons,
+ 

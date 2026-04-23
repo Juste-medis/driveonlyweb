@@ -1,0 +1,252 @@
+{* 
+Template pour afficher les filtres avec checkboxes
+Structure: Caractéristiques + Déclinaisons groupées par titre
+*}
+
+<div class="dovehicle-filters-widget">
+    
+    {* CARACTÉRISTIQUES / FEATURES *}
+    {if !empty($dovehicle_caracteristiques)}
+    <div class="filters-section features-section">
+        <h3 class="filters-title">Filtrer par caractéristiques</h3>
+        
+        {foreach $dovehicle_caracteristiques as $feature}
+        <div class="filter-group facet">
+            <button class="filter-group-title collapse-toggle" type="button" data-toggle="collapse">
+                <span class="filter-label">{$feature.feature_name}</span>
+                <i class="material-icons">expand_more</i>
+            </button>
+            
+            <div class="collapse filter-values">
+                {foreach $feature.feature_values as $value}
+                <label class="filter-item custom-checkbox">
+                    <input type="checkbox" 
+                           class="dovehicle-filter-feature" 
+                           name="features" 
+                           value="{$value.id_feature_value}"
+                           {if in_array($value.id_feature_value|strval, $dovehicle_selected_features)}checked{/if}
+                           data-feature-id="{$feature.id_feature}"
+                           data-feature-value-id="{$value.id_feature_value}">
+                    <span class="checkmark"></span>
+                    <span class="label-text">{$value.value}</span>
+                </label>
+                {/foreach}
+            </div>
+        </div>
+        {/foreach}
+    </div>
+    {/if}
+    
+    {* DÉCLINAISONS / ATTRIBUTES *}
+    {if !empty($dovehicle_declinaisons)}
+    <div class="filters-section attributes-section">
+        <h3 class="filters-title">Filtrer par options</h3>
+        
+        {foreach $dovehicle_declinaisons as $group}
+        <div class="filter-group facet">
+            <button class="filter-group-title collapse-toggle" type="button" data-toggle="collapse">
+                <span class="filter-label">{$group.attribute_group_name}</span>
+                <i class="material-icons">expand_more</i>
+            </button>
+            
+            <div class="collapse filter-values">
+                {foreach $group.attribute_values as $attr}
+                <label class="filter-item custom-checkbox">
+                    <input type="checkbox" 
+                           class="dovehicle-filter-attribute" 
+                           name="attributes" 
+                           value="{$attr.id_attribute}"
+                           {if in_array($attr.id_attribute|strval, $dovehicle_selected_attributes)}checked{/if}
+                           data-attribute-id="{$attr.id_attribute}">
+                    <span class="checkmark"></span>
+                    <span class="label-text">{$attr.value}</span>
+                </label>
+                {/foreach}
+            </div>
+        </div>
+        {/foreach}
+    </div>
+    {/if}
+    
+    {* BOUTON RESET *}
+    <div class="filters-actions">
+        <button class="btn btn-secondary dovehicle-reset-filters" type="button">
+            Réinitialiser les filtres
+        </button>
+    </div>
+    
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryId = '{$dovehicle_category_id}';
+    
+    // Gérer les changements de checkboxes
+    document.querySelectorAll('.dovehicle-filter-feature, .dovehicle-filter-attribute').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            updateFilters();
+        });
+    });
+    
+    // Bouton reset
+    const resetBtn = document.querySelector('.dovehicle-reset-filters');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            document.querySelectorAll('.dovehicle-filter-feature, .dovehicle-filter-attribute').forEach(cb => cb.checked = false);
+            updateFilters();
+        });
+    }
+    
+    // Fonction pour mettre à jour les filtres
+    function updateFilters() {
+        // Récupérer les valeurs sélectionnées
+        const selectedFeatures = Array.from(document.querySelectorAll('.dovehicle-filter-feature:checked')).map(cb => cb.value);
+        const selectedAttributes = Array.from(document.querySelectorAll('.dovehicle-filter-attribute:checked')).map(cb => cb.value);
+        
+        // Construire l'URL avec les paramètres
+        const params = new URLSearchParams();
+        params.set('id_category', categoryId);
+        
+        if (selectedFeatures.length > 0) {
+            params.set('features', selectedFeatures.join(','));
+        }
+        
+        if (selectedAttributes.length > 0) {
+            params.set('attributes', selectedAttributes.join(','));
+        }
+        
+        // Mettre à jour l'URL (sans recharger la page)
+        window.history.replaceState({}, '', '?' + params.toString());
+        
+        // Vous pouvez aussi déclencher une requête AJAX pour charger les produits filtrés
+        // (voir ci-dessous)
+    }
+});
+</script>
+
+<style>
+.dovehicle-filters-widget {
+    margin-bottom: 20px;
+}
+
+.filters-section {
+    margin-bottom: 15px;
+}
+
+.filters-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.filter-group {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+.filter-group-title {
+    width: 100%;
+    padding: 10px 12px;
+    background: #f5f5f5;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+}
+
+.filter-group-title:hover {
+    background: #efefef;
+}
+
+.filter-values {
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.custom-checkbox {
+    position: relative;
+    padding-left: 28px;
+}
+
+.custom-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: #eee;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+.custom-checkbox input[type="checkbox"]:checked ~ .checkmark {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.custom-checkbox input[type="checkbox"]:checked ~ .checkmark:after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    top: 1px;
+    left: 3px;
+}
+
+.label-text {
+    font-size: 13px;
+    margin-left: 8px;
+    flex: 1;
+}
+
+.filters-actions {
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.dovehicle-reset-filters {
+    width: 100%;
+    padding: 10px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.dovehicle-reset-filters:hover {
+    background: #e0e0e0;
+}
+
+/* Collapse animation */
+.collapse {
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.collapse:not(.show) {
+    max-height: 0;
+    overflow: hidden;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+</style>
