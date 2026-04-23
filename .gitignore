@@ -103,10 +103,11 @@ docker-compose.override.yml
 .htpasswd
 tmp/
 
-.php-ini 
-/modules
+.php-ini
+/modules/*
+!/modules/dovehicle/
+!/modules/dovehicle/**
 /src
-#!/modules/cucustome
 
 /admin403aeargf/backups/*
 /admin403aeargf/themes/*/img/

@@ -1,0 +1,49 @@
+# modules/dovehicle/config/services.yml
+# Injection de dépendances Symfony — PrestaShop 1.7.8.7
+
+services:
+  _defaults:
+    public: true
+    autowire: false
+    autoconfigure: false
+
+  # ── Repositories ─────────────────────────────────────────
+  dovehicle.repository.vehicle_model:
+    class: DoVehicle\Repository\VehicleModelRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  dovehicle.repository.vehicle_engine:
+    class: DoVehicle\Repository\VehicleEngineRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  dovehicle.repository.product_family:
+    class: DoVehicle\Repository\ProductFamilyRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  dovehicle.repository.product_compatibility:
+    class: DoVehicle\Repository\ProductCompatibilityRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  # ── Services métier ───────────────────────────────────────
+  dovehicle.service.vehicle:
+    class: DoVehicle\Service\VehicleService
+    arguments:
+      - '@dovehicle.repository.vehicle_model'
+      - '@dovehicle.repository.vehicle_engine'
+      - '@dovehicle.repository.product_family'
+      - '@dovehicle.repository.product_compatibility'
+
+  # ── Form Handler ─────────────────────────────────────────
+  dovehicle.form_handler.product_vehicle:
+    class: DoVehicle\FormHandler\ProductVehicleFormHandler
+    arguments:
+      - '@dovehicle.repository.product_compatibility'
+      - '@dovehicle.repository.product_family'

@@ -16,8 +16,9 @@ monolog:
         main:
             type:   stream
             path:   '%env(PS_LOG_OUTPUT)%'
-            level:  debug
-            channels: ["!event"]
+            level:  error
+            channels: ["!event", "!translation"] 
+
         console:
             type:   console
             bubble: false

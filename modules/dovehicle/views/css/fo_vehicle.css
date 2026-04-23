@@ -1,0 +1,272 @@
+/**
+ * fo_vehicle.css — DoVehicle Front-Office
+ * Styles du sélecteur véhicule + liste produits
+ */
+
+/* ── Sélecteur véhicule ────────────────────────────────────── */
+
+.dovehicle-selector-wrapper {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 12px 0;
+  border-bottom: 3px solid #e63946;
+}
+
+.dovehicle-selector-wrapper .dov-icon {
+  margin-right: 6px;
+  font-size: 1.2em;
+}
+
+/* Véhicule mémorisé */
+.dovehicle-active-vehicle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+}
+
+.dovehicle-active-vehicle .dov-vehicle-label {
+  font-weight: 600;
+  color: #f1f1f1;
+}
+
+.dovehicle-active-vehicle a {
+  color: #ffd166;
+  text-decoration: none;
+  font-size: 0.85rem;
+  border: 1px solid #ffd166;
+  padding: 2px 8px;
+  border-radius: 4px;
+  transition: background .2s;
+}
+
+.dovehicle-active-vehicle a:hover {
+  background: #ffd166;
+  color: #1a1a2e;
+}
+
+/* Formulaire de sélection */
+.dovehicle-form {
+  display: block;
+}
+
+.dovehicle-form.dov-hidden {
+  display: none;
+}
+
+.dov-selects-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dov-select-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 160px;
+  min-width: 150px;
+}
+
+.dov-select-group label {
+  font-size: 0.75rem;
+  color: #aaa;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.dov-select {
+  padding: 8px 10px;
+  border: 1px solid #444;
+  background: #16213e;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+
+.dov-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dov-select:focus {
+  outline: none;
+  border-color: #e63946;
+}
+
+.dov-btn-group {
+  flex: 0 0 auto;
+}
+
+#dov-fo-search {
+  background: #e63946;
+  border-color: #e63946;
+  font-weight: 600;
+  padding: 9px 20px;
+  white-space: nowrap;
+  transition: background .2s;
+}
+
+#dov-fo-search:hover:not(:disabled) {
+  background: #c1121f;
+  border-color: #c1121f;
+}
+
+#dov-fo-search:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Liste produits ─────────────────────────────────────────── */
+
+.dov-page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+/* Filtre familles sidebar */
+.dov-filter-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #888;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #e63946;
+}
+
+.dov-family-filter {
+  padding: 0;
+}
+
+.dov-family-filter li {
+  margin-bottom: 4px;
+}
+
+.dov-family-filter a {
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background .15s;
+}
+
+.dov-family-filter a:hover,
+.dov-family-filter a.active {
+  background: #e63946;
+  color: #fff;
+}
+
+.dov-subfamily-list {
+  padding-left: 16px;
+  list-style: none;
+  margin-top: 4px;
+}
+
+.dov-subfamily-list a {
+  font-size: 0.83rem;
+}
+
+/* Cartes produits */
+.dov-product-card {
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: box-shadow .2s, transform .2s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dov-product-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,.12);
+  transform: translateY(-2px);
+}
+
+.dov-product-img-link img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  padding: 8px;
+  background: #f8f8f8;
+}
+
+.dov-no-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bbb;
+  font-size: 0.8rem;
+}
+
+.dov-product-info {
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dov-product-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.dov-product-name a {
+  color: #1a1a2e;
+  text-decoration: none;
+}
+
+.dov-product-name a:hover {
+  color: #e63946;
+}
+
+.dov-ref {
+  font-size: 0.75rem;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.dov-product-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e63946;
+  margin-top: auto;
+  margin-bottom: 6px;
+}
+
+/* Pagination */
+.dov-pagination .page-item.active .page-link {
+  background: #e63946;
+  border-color: #e63946;
+}
+
+.dov-pagination .page-link {
+  color: #e63946;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .dov-selects-row {
+    flex-direction: column;
+  }
+
+  .dov-select-group {
+    flex: 1 1 100%;
+  }
+}

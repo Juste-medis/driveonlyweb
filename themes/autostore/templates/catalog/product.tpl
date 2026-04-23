@@ -69,6 +69,7 @@
               <h1 class="h1" itemprop="name">{block name='page_title'}{$product.name}{/block}</h1>
             {/block}
           {/block}
+          driverrronly
           {if Module::isInstalled(productcomments) && Module::isEnabled(productcomments)}
             <div class="js-additional-info-to additional-info-to"></div>
           {/if}

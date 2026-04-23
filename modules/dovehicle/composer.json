@@ -1,0 +1,25 @@
+{
+    "name": "driveonly/dovehicle",
+    "description": "Module PrestaShop 1.7 — Navigation véhicule : Marque > Modèle > Motorisation > Famille > Sous-famille",
+    "type": "prestashop-module",
+    "license": "proprietary",
+    "version": "1.0.0",
+    "require": {
+        "php": ">=7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "DoVehicle\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DriveOnly",
+            "role": "Developer"
+        }
+    ],
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": false
+    }
+}
