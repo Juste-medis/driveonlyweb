@@ -15,7 +15,6 @@
     /* ── Config ─────────────────────────────────────────────────── */
 
     const CFG = window.DOVEHICLE_CONFIG || {};
-    console.log('DOVEHICLE_CONFIGd', window.DOVEHICLE_CONFIG);
 
     /* Compatibilités en mémoire (tableau JS) */
     let compatList = [];
@@ -101,11 +100,6 @@
                 removeFromList(idCompat, rowIndex);
                 checkEmptyTable();
             }
-        });
-
-        /* Avant soumission du form PS → sérialiser les données dans les hiddens */
-        $(document).on('submit', 'form', function () {
-            serializeToHiddens();
         });
 
         /* PrestaShop 1.7 utilise aussi des boutons "Enregistrer" custom en dehors du form */
@@ -236,8 +230,10 @@
             note: note,
         };
 
-        compatList.push(newItem);
         appendCompatRow(newItem, compatList.length - 1);
+
+        addCompatAjax(newItem, function () { });
+
 
         // Remettre les selects
         resetSelect('#dov-select-model', true);
@@ -249,6 +245,74 @@
         // Supprimer la ligne "Aucune compatibilité"
         $('#dov-empty-row').remove();
     }
+
+    /* ── Sérialisation vers les champs hidden ───────────────────── */
+
+    function serializeToHiddens() {
+        // Sérialiser les compatibilités
+        const cleanList = compatList.map(function (item) {
+            return {
+                id_compat: item.id_compat || 0,
+                id_manufacturer: item.id_manufacturer || 0,
+                id_do_vehicle_model: item.id_do_vehicle_model || 0,
+                id_do_vehicle_engine: item.id_do_vehicle_engine || 0,
+                note: item.note || '',
+            };
+        });
+
+        $('#dovehicle_compat_json').val(JSON.stringify(cleanList));
+
+        serializeFamiliesToHidden();
+    }
+
+    function serializeFamiliesToHidden() {
+        const familyIds = [];
+
+        $('.dov-family-checkbox:checked').each(function () {
+            familyIds.push(parseInt($(this).val(), 10));
+        });
+
+
+
+        $('#dovehicle_families_json').val(JSON.stringify(familyIds));
+    }
+
+    /* ── UI helpers ─────────────────────────────────────────────── */
+
+    function toggleAddBtn() {
+        const hasBrand = parseInt($('#dov-select-brand').val(), 10) > 0;
+        $('#dov-btn-add-compat').prop('disabled', !hasBrand);
+
+        // Afficher la zone note si une marque est choisie
+        if (hasBrand) {
+            $('#dov-note-row').css('display', '');
+        } else {
+            $('#dov-note-row').css('display', 'none');
+        }
+    }
+
+    function resetSelect(selector, disable) {
+        const defaultLabels = {
+            '#dov-select-model': '— Choisir un modèle —',
+            '#dov-select-engine': '— Choisir une motorisation —',
+        };
+
+        $(selector)
+            .html('<option value="">' + (defaultLabels[selector] || '—') + '</option>')
+            .prop('disabled', !!disable);
+    }
+
+    function escHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+
 
     function appendCompatRow(item, index) {
         const engineLabel = item.engine_name && item.engine_name !== '—'
@@ -291,6 +355,15 @@
         }
     }
 
+    function checkEmptyTable() {
+        if ($('#dov-compat-tbody tr').length === 0) {
+            $('#dov-compat-tbody').html(
+                '<tr id="dov-empty-row"><td colspan="5" class="text-center text-muted">' +
+                'Aucune compatibilité définie</td></tr>'
+            );
+        }
+    }
+
     function deleteCompatAjax(idCompat, callback) {
         $.ajax({
             url: CFG.ajax_url,
@@ -316,77 +389,30 @@
         });
     }
 
-    function checkEmptyTable() {
-        if ($('#dov-compat-tbody tr').length === 0) {
-            $('#dov-compat-tbody').html(
-                '<tr id="dov-empty-row"><td colspan="5" class="text-center text-muted">' +
-                'Aucune compatibilité définie</td></tr>'
-            );
-        }
-    }
-
-    /* ── Sérialisation vers les champs hidden ───────────────────── */
-
-    function serializeToHiddens() {
-        // Sérialiser les compatibilités
-        const cleanList = compatList.map(function (item) {
-            return {
-                id_compat: item.id_compat || 0,
-                id_manufacturer: item.id_manufacturer || 0,
-                id_do_vehicle_model: item.id_do_vehicle_model || 0,
-                id_do_vehicle_engine: item.id_do_vehicle_engine || 0,
-                note: item.note || '',
-            };
+    function addCompatAjax(data, callback) {
+        $.ajax({
+            url: CFG.ajax_url,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                action: 'addCompat',
+                id_product: CFG.id_product,
+                compat: JSON.stringify(data),
+                token: CFG.token
+            },
+            success: function (resp) {
+                if (resp.success) {
+                    callback();
+                } else {
+                    alert('Erreur lors de l\'ajout.');
+                }
+            },
+            error: function () {
+                // En cas d'erreur réseau : supprimer quand même côté UI
+                // La re-synchro à la sauvegarde corrigera l'état
+                callback();
+            }
         });
-
-        $('#dovehicle_compat_json').val(JSON.stringify(cleanList));
-
-        serializeFamiliesToHidden();
-    }
-
-    function serializeFamiliesToHidden() {
-        const familyIds = [];
-
-        $('.dov-family-checkbox:checked').each(function () {
-            familyIds.push(parseInt($(this).val(), 10));
-        });
-
-        $('#dovehicle_families_json').val(JSON.stringify(familyIds));
-    }
-
-    /* ── UI helpers ─────────────────────────────────────────────── */
-
-    function toggleAddBtn() {
-        const hasBrand = parseInt($('#dov-select-brand').val(), 10) > 0;
-        $('#dov-btn-add-compat').prop('disabled', !hasBrand);
-
-        // Afficher la zone note si une marque est choisie
-        if (hasBrand) {
-            $('#dov-note-row').css('display', '');
-        } else {
-            $('#dov-note-row').css('display', 'none');
-        }
-    }
-
-    function resetSelect(selector, disable) {
-        const defaultLabels = {
-            '#dov-select-model': '— Choisir un modèle —',
-            '#dov-select-engine': '— Choisir une motorisation —',
-        };
-
-        $(selector)
-            .html('<option value="">' + (defaultLabels[selector] || '—') + '</option>')
-            .prop('disabled', !!disable);
-    }
-
-    function escHtml(str) {
-        if (!str) return '';
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
     }
 
 })(jQuery);

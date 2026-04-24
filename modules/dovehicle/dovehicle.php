@@ -27,9 +27,9 @@ use DoVehicle\Repository\CategoryFiltersRepository;
 use DoVehicle\Service\VehicleService;
 use DoVehicle\FormHandler\ProductVehicleFormHandler;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 
-use DoVehicle\Tools\Utils;
-
+ 
 class Dovehicle extends Module
 {
     // ─── Constantes du module ───────────────────────────────────────────────
@@ -42,8 +42,9 @@ class Dovehicle extends Module
     private const HOOKS = [
         // BO Produit
         'displayAdminProductsMainStepLeftColumnBottom',
-        'actionAfterCreateProductFormHandler',
-        'actionAfterUpdateProductFormHandler',
+ 
+        'actionProductSave', 
+        'actionProductAdd',
         // FO
         'displayTop',
         'displayHeader',
@@ -78,7 +79,7 @@ class Dovehicle extends Module
     {
 
         return parent::install()
-            && $this->installSql()
+            // && $this->installSql()
             && $this->registerHooks()
             && $this->setHookPosition('displayLeftColumn', 0)
             && $this->installTab();
@@ -97,8 +98,8 @@ class Dovehicle extends Module
             $categoryVar = $this->context->smarty->getTemplateVars()['category']?? null;
   
             if ($categoryVar) { 
-   $idCategory = (int) $categoryVar["id"];
-      } elseif (
+            $idCategory = (int) $categoryVar["id"];
+            } elseif (
                 $this->context->controller->getPageType() === 'category'
             ) {
                 $category = $this->context->controller->getCategory();
@@ -114,8 +115,7 @@ class Dovehicle extends Module
             $filtersRepo = new CategoryFiltersRepository();
             $idLang = (int) $this->context->language->id;
 
-                                           Utils::log($idCategory);
-
+ 
             // Récupérer attributs et caractéristiques
             $attributes = $filtersRepo->getAttributesWithValuesByCategory($idCategory, $idLang);
             $features = $filtersRepo->getFeaturesByCategory($idCategory, $idLang);
@@ -128,41 +128,37 @@ class Dovehicle extends Module
                 'dovehicle_ajax_url'   => $this->context->link->getModuleLink('dovehicle', 'filters'),
             ];
             $this->context->smarty->assign( $dataassign );
-        Utils::log($dataassign);
-
+ 
             return $this->display(__FILE__, 'views/templates/front/display_filters.twig');
         } catch (\Exception $e) {
-            \DoVehicle\Tools\Utils::log("ERREUR dans hookdisplayLeftColumn: " . $e->getMessage());
-            //stack trace complète dans les logs pour debug
-            Utils::log($e->getTraceAsString());
-
+            myprint("ERREUR dans hookdisplayLeftColumn: " . $e->getMessage());  
             return '';
         }
     }
  
-public function hookFilterProductSearch($params)
-{
-    $searchQuery = $_GET;
+    public function hookFilterProductSearch($params)
+    {
+        $searchQuery = $_GET;
 
-    $idCategory      = (int) ($searchQuery['id_category'] ?? 0);
-    $idLang          = (int) ($searchQuery['id_lang'] ?? (int) Context::getContext()->language->id);
-    $attributeIds    = isset($searchQuery['attributes']) ? array_map('intval', (array) $searchQuery['attributes']) : [];
-    $featureValueIds = isset($searchQuery['features'])   ? array_map('intval', (array) $searchQuery['features'])   : [];
+        $idCategory      = (int) ($searchQuery['id_category'] ?? 0);
+        $idLang          = (int) ($searchQuery['id_lang'] ?? (int) Context::getContext()->language->id);
+        $attributeIds    = isset($searchQuery['attributes']) ? array_map('intval', (array) $searchQuery['attributes']) : [];
+        $featureValueIds = isset($searchQuery['features'])   ? array_map('intval', (array) $searchQuery['features'])   : [];
 
-    if (!$idCategory || (empty($attributeIds) && empty($featureValueIds))) {
-        return;
+        if (!$idCategory || (empty($attributeIds) && empty($featureValueIds))) {
+            return;
+        }
+
+        $productIds = $this->getFilteredProductIds($idCategory, $attributeIds, $featureValueIds);
+
+        // On injecte les IDs dans le contexte pour que le controller category les utilise
+        // PS 1.7 : on surcharge via hook actionProductSearchProviderRunQueryBefore
+        // ou on passe par assignation Smarty + JS selon votre architecture
+        Context::getContext()->smarty->assign([
+            'dovehicle_filtered_ids'   => $productIds,
+            'dovehicle_filtered_count' => count($productIds),
+        ]);
     }
-
-    $productIds = $this->getFilteredProductIds($idCategory, $attributeIds, $featureValueIds);
-
-    // On injecte les IDs dans le contexte pour que le controller category les utilise
-    // PS 1.7 : on surcharge via hook actionProductSearchProviderRunQueryBefore
-    // ou on passe par assignation Smarty + JS selon votre architecture
-    Context::getContext()->smarty->assign([
-        'dovehicle_filtered_ids'   => $productIds,
-        'dovehicle_filtered_count' => count($productIds),
-    ]);
-}
 
 /**
  * Retourne les IDs produits correspondant aux filtres attributs ET features
@@ -176,7 +172,7 @@ private function getFilteredProductIds(
     int   $idCategory,
     array $attributeIds,
     array $featureValueIds
-): array {
+    ) {
     $db = Db::getInstance();
     $ps = _DB_PREFIX_;
 
@@ -293,16 +289,10 @@ private function getFilteredProductIds(
             // Rendre et retourner le template Smarty
             return $this->display(__FILE__, 'views/templates/hook/product_vehicle_tab.tpl');
         } catch (\Exception $e) {
-            Utils::log("ERREUR dans hookDisplayAdminProductsMainStepLeftColumnBottom: " . $e->getMessage());
+            myprint("ERREUR dans hookDisplayAdminProductsMainStepLeftColumnBottom: " . $e->getMessage());
             return '';
         }
-    }
-
-
-
-
-
-
+    } 
 
     /**
      * Exécute install.sql en remplaçant PREFIX_ par le vrai préfixe PS
@@ -493,49 +483,44 @@ private function getFilteredProductIds(
     // ─────────────────────────────────────────────────────────────────────────
     // HOOKS — BACK OFFICE
     // ─────────────────────────────────────────────────────────────────────────
-
-    /**
-     * Sauvegarde après création produit
-     */
-    public function hookActionAfterCreateProductFormHandler(array $params): void
+ 
+    public function hookActionProductSave(array $params): void
     {
-        $this->saveVehicleData($params);
+        $this->saveVehicleData($params); 
     }
-
-    /**
-     * Sauvegarde après mise à jour produit
-     */
-    public function hookActionAfterUpdateProductFormHandler(array $params): void
+    public function hookActionProductAdd(array $params): void
     {
-        $this->saveVehicleData($params);
-    }
-
+        $this->saveVehicleData($params); 
+    } 
+    
     /**
      * Logique de sauvegarde commune création/mise à jour
      */
     private function saveVehicleData(array $params): void
     {
-        $idProduct = isset($params['id']) ? (int) $params['id'] : 0;
+        $idProduct = isset($params['id_product']) ? (int) $params['id_product'] : 0;
 
         if (!$idProduct) {
             return;
         }
-
-        try {
+        
+        $productData = $_POST["product"] ?? [];
+     
+        try { 
             $handler = $this->getService('dovehicle.form_handler.product_vehicle');
-
-            // Récupérer les données depuis POST (champs hidden du formulaire)
-            $compatJson   = Tools::getValue('product.dovehicle_compat_json', '[]');
-            $familiesJson = Tools::getValue('product.dovehicle_families_json', '[]');
- 
+                
+            $compatJson   = $productData['dovehicle_compat_json'] ?? '[]';
+            $familiesJson = $productData['dovehicle_families_json'] ?? '[]';
+                
+                myprint($compatJson);
+         
             $compats   = json_decode($compatJson, true)   ?: [];
-            $families  = json_decode($familiesJson, true) ?: [];
-
-            $handler->saveCompatibilities($idProduct, $compats);
-            $handler->saveFamilyLinks($idProduct, $families);
-
-         } catch (\Exception $e) {
-            Utils::log("ERROR in saveVehicleData: " . $e->getMessage());
+            $families  = json_decode($familiesJson, true) ?: []; 
+ 
+            // $handler->saveCompatibilities($idProduct, $compats);
+            $handler->saveFamilyLinks($idProduct, $families); 
+         } catch (\Exception $e) { 
+            myprint("ERROR in saveVehicleData: " . $e->getMessage());
         }
     }
 
@@ -680,9 +665,18 @@ private function getFilteredProductIds(
      * Accès au container Symfony (services.yml)
      * Encapsulé ici pour éviter la dépendance directe dans le code métier
      */
-    public function getService(string $serviceId): ?object
-    {
-        $container = $this->context->controller->getContainer();
+
+    public function getService(string $serviceId) {
+        $container = SymfonyContainer::getInstance();
+        if (!$container->has($serviceId)) {
+                if ($containermy->has($serviceId)) {
+                    $containermy = $this->context->controller->getContainer();
+        $container = $containermy;
+                }
+
+            return null;
+        }
+
         return $container->get($serviceId);
     }
 

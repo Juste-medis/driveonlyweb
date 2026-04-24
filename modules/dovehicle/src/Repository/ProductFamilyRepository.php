@@ -174,11 +174,12 @@ class ProductFamilyRepository
      */
     public function syncProductFamilies(int $idProduct, array $familyIds): bool
     {
-        // Supprimer les liaisons existantes
         Db::getInstance()->delete(
-            _DB_PREFIX_ . $this->linkTable,
+            $this->linkTable, 
             'id_product = ' . (int)$idProduct
         );
+
+
 
         // Ajouter les nouvelles liaisons
         foreach (array_unique($familyIds) as $idFamily) {

@@ -77,7 +77,7 @@ class ProductCompatibilityRepository
      * Créer une compatibilité
      */
     public function create(array $data): int
-    {
+    { 
         $sql = 'INSERT INTO `' . _DB_PREFIX_ . $this->table . '`
                 (id_product, id_manufacturer, id_do_vehicle_model, id_do_vehicle_engine, note, date_add)
                 VALUES (
@@ -90,8 +90,10 @@ class ProductCompatibilityRepository
                 )';
 
         if (Db::getInstance()->execute($sql)) {
+
             return Db::getInstance()->Insert_ID();
         }
+                myprint("Error in create compatibility: " . Db::getInstance()->getMsgError());
 
         return 0;
     }
@@ -152,4 +154,38 @@ class ProductCompatibilityRepository
 
         return (int)($result['count'] ?? 0);
     }
+
+    public function syncCompatibilities(int $idProduct, array $compats): void
+    {
+        // Récupérer les compatibilités existantes
+        $existing = $this->findByProduct($idProduct);
+        // myprint($existing);
+        $existingMap = [];
+        foreach ($existing as $e) {
+            $existingMap[$e['id_compat']] = $e;
+        }
+
+        // Traiter les nouvelles données
+        foreach ($compats as $compat) {
+
+            if (empty($compat['id_compat']) || !isset($existingMap[$compat['id_compat']])) {
+
+                // Nouvelle compatibilité
+                $this->create(array_merge($compat, ['id_product' => $idProduct]));
+            } else {
+                // Compatibilité existante à mettre à jour
+                $this->update((int)$compat['id_compat'], $compat);
+                unset($existingMap[$compat['id_compat']]);
+            }
+        }
+
+        // Supprimer les compatibilités qui ne sont plus présentes
+        foreach ($existingMap as $idCompat => $data) {
+            $this->delete((int)$idCompat);
+        }
+}
+
+
+
+
 }

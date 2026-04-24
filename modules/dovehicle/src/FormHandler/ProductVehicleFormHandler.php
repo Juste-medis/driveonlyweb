@@ -58,8 +58,7 @@ class ProductVehicleFormHandler
     {
         if ($idProduct <= 0) {
             return;
-        }
-
+        } 
         // Filtrer et caster en entiers
         $cleanIds = array_filter(
             array_map('intval', $familyIds),

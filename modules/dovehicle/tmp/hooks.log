@@ -909,7 +909,25 @@
     [active] => 1
     [position] => 1
 )
+[2026-04-23 04:37:28] Array
+(
+    [id_hook] => 681
+    [name] => actionBeforeUpdateProductFormHandler
+    [title] => Modify product identifiable object data before updating it
+    [description] => This hook allows to modify product identifiable object form data before it was updated
+    [active] => 1
+    [position] => 1
+)
 
+[2026-04-23 04:37:28] Array
+(
+    [id_hook] => 283
+    [name] => actionBeforeUpdateProfileFormHandler
+    [title] => Modify profile identifiable object data before updating it
+    [description] => This hook allows to modify profile identifiable object forms data before it was updated
+    [active] => 1
+    [position] => 1
+)
 [2026-04-23 04:37:28] Array
 (
     [id_hook] => 682
@@ -1670,25 +1688,7 @@
     [position] => 1
 )
 
-[2026-04-23 04:37:28] Array
-(
-    [id_hook] => 681
-    [name] => actionBeforeUpdateProductFormHandler
-    [title] => Modify product identifiable object data before updating it
-    [description] => This hook allows to modify product identifiable object form data before it was updated
-    [active] => 1
-    [position] => 1
-)
 
-[2026-04-23 04:37:28] Array
-(
-    [id_hook] => 283
-    [name] => actionBeforeUpdateProfileFormHandler
-    [title] => Modify profile identifiable object data before updating it
-    [description] => This hook allows to modify profile identifiable object forms data before it was updated
-    [active] => 1
-    [position] => 1
-)
 
 [2026-04-23 04:37:28] Array
 (

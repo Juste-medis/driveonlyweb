@@ -45,8 +45,8 @@
       </div>
 
       {* Note optionnelle *}
-      <div class="col-md-2 d-flex align-items-end">
-        <button type="button" id="dov-btn-add-compat" class="btn btn-primary btn-sm w-100" disabled>
+      <div class="col-md-2 d-flex align-items-end flex-column justify-content-end">
+         <button type="button" id="dov-btn-add-compat" class="btn btn-primary" disabled>
           <i class="material-icons">add</i>
           {l s='Ajouter' mod='dovehicle'}
         </button>
@@ -123,7 +123,7 @@
           <div class="custom-control custom-checkbox">
             <input type="checkbox"
                    class="custom-control-input dov-family-checkbox"
-                   id="dov-family-{$family.id_do_product_family|intval}"
+                    id="dov-family-{$family.id_do_product_family|intval}"
                    value="{$family.id_do_product_family|intval}"
                    {if in_array($family.id_do_product_family, $dovehicle_linked_families)}checked{/if}>
             <label class="custom-control-label"
@@ -147,13 +147,12 @@
 
 {* Configuration JS *}
 <script>
-window.DOVEHICLE_CONFIG = {
-    ajax_url: '{$dovehicle_ajax_url|escape:'javascript'}',
-    token:    '{$dovehicle_token|escape:'javascript'}',
-    id_product: {$dovehicle_id_product|intval},
-    module_dir: '{$module_dir|escape:'javascript'}',
-};
-
+      window.DOVEHICLE_CONFIG = {
+          ajax_url: '{$dovehicle_ajax_url|escape:'javascript'}',
+          token:    '{$dovehicle_token|escape:'javascript'}',
+          id_product: {$dovehicle_id_product|intval},
+          module_dir: '{$module_dir|escape:'javascript'}',
+      };
 </script>
-<script src="{$module_dir}/views/js/bo_vehicle.js"></script>
+<script src="{$module_dir}/views/js/bo_vehicle.js?v={time()}"></script>
  

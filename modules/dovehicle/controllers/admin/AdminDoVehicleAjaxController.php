@@ -11,6 +11,7 @@
 declare(strict_types=1);
 
 use DoVehicle\Service\VehicleService;
+use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 
 class AdminDoVehicleAjaxController extends ModuleAdminController
 {
@@ -30,10 +31,9 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
     /**
      * Initialise le service depuis le container
      */
-    public function init(): void
+    public function init() 
     {
         parent::init();
-
         $this->vehicleService = $this->getService('dovehicle.service.vehicle');
     }
 
@@ -41,7 +41,7 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
      * Dispatcher principal
      * Lit le paramètre GET "action" et appelle la méthode correspondante
      */
-    public function postProcess(): void
+    public function postProcess()
     {
         // Sécurité : vérifier que la requête est bien un AJAX authentifié
         if (!$this->isXmlHttpRequest()) {
@@ -61,6 +61,10 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
 
             case 'deleteCompat':
                 $this->actionDeleteCompat();
+                break;
+
+            case 'addCompat':
+                $this->actionAddCompat();
                 break;
 
             default:
@@ -84,7 +88,7 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
      *   ]
      * }
      */
-    private function actionGetModels(): void
+    private function actionGetModels()
     {
         $idManufacturer = (int) Tools::getValue('id_manufacturer', 0);
 
@@ -119,7 +123,7 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
      *   ]
      * }
      */
-    private function actionGetEngines(): void
+    private function actionGetEngines()
     {
         $idModel = (int) Tools::getValue('id_model', 0);
 
@@ -137,7 +141,7 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
      *
      * POST params : id_compat (int)
      */
-    private function actionDeleteCompat(): void
+    private function actionDeleteCompat()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->dieWithError('Méthode POST requise', 405);
@@ -148,13 +152,45 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
         if ($idCompat <= 0) {
             $this->dieWithJson(['success' => false, 'message' => 'id_compat invalide']);
         }
-
-        /** @var \DoVehicle\Repository\ProductCompatibilityRepository $compatRepo */
+ 
         $compatRepo = $this->getService('dovehicle.repository.product_compatibility');
-        $deleted    = $compatRepo->deleteSingle($idCompat);
+        $deleted    = $compatRepo->delete($idCompat);
 
         $this->dieWithJson(['success' => $deleted]);
     }
+
+    /**
+     * Ajoute une compatibilité véhicule (appelé depuis le formulaire BO)
+     *
+     * POST params : id_product, id_manufacturer, id_model, id_engine, note
+     */
+    private function actionAddCompat()
+        {       
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                $this->dieWithError('Méthode POST requise', 405);
+            }
+
+            $id_product = (int) Tools::getValue('id_product', 0); 
+            $compatJson = Tools::getValue('compat', '{}');
+            
+            $compat = json_decode($compatJson, true);
+
+            if ($id_product <= 0) {
+                $this->dieWithJson(['success' => false, 'message' => 'id_product invalide']);
+            }
+
+            if (!is_array($compat)) {
+                $this->dieWithJson(['success' => false, 'message' => 'JSON invalide']);
+            }
+
+            $compatRepo = $this->getService('dovehicle.repository.product_compatibility');
+
+            $createdId = $compatRepo->create(
+                array_merge($compat, ['id_product' => $id_product])
+            );
+
+            $this->dieWithJson(['success' => 'ok', 'id' => $createdId]);
+        }
 
     // ─── Helpers ─────────────────────────────────────────────────────────────
 
@@ -164,7 +200,7 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
             && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
     }
 
-    private function dieWithJson(array $data, int $statusCode = 200): void
+    private function dieWithJson(array $data, int $statusCode = 200)
     {
         http_response_code($statusCode);
         header('Content-Type: application/json; charset=utf-8');
@@ -172,17 +208,23 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
         exit;
     }
 
-    private function dieWithError(string $message, int $statusCode = 500): void
+    private function dieWithError(string $message, int $statusCode = 500)
     {
         $this->dieWithJson(['success' => false, 'message' => $message], $statusCode);
     }
 
-    /**
-     * Override pour accéder au container Symfony
-     */
-    public function getService(string $serviceId): ?object
-    {
-        $container = $this->context->controller->getContainer();
+
+     public function getService(string $serviceId) {
+        $container = SymfonyContainer::getInstance();
+        if (!$container->has($serviceId)) {
+                if ($containermy->has($serviceId)) {
+                    $containermy = $this->context->controller->getContainer();
+        $container = $containermy;
+                }
+
+            return null;
+        }
+
         return $container->get($serviceId);
     }
 }
