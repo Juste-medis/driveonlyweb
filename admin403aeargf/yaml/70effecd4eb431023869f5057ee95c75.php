@@ -1,11 +1,11 @@
 <?php return array (
-  'name' => 'AngarTheme (Original)',
-  'display_name' => 'AngarTheme (Original)',
+  'name' => 'AngarTheme',
+  'display_name' => 'AngarTheme',
   'version' => '2.3.1.0',
   'theme_key' => '9330a25bd1fdd0b46ec2e57836664a27',
   'author' => 
   array (
-    'name' => 'AngarThemes (Original)',
+    'name' => 'AngarThemes',
     'email' => 'angarthemes@gmail.com',
     'url' => 'https://angarthemes.eu',
   ),

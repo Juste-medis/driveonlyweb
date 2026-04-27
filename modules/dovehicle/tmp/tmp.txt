@@ -1,0 +1,38 @@
+
+$param de hookActionProductSearchProviderRunQueryBefore(array $params): void: 
+
+[2026-04-26 16:16:04] Array
+(
+    [query] => PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery Object
+        (
+            [queryType:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => category
+            [idCategory:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => 334
+            [idManufacturer:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => 
+            [idSupplier:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => 
+            [searchString:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => 
+            [searchTag:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => 
+            [encodedFacets:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => 
+            [resultsPerPage:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => 12
+            [page:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => 2
+            [sortOrder:PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery:private] => PrestaShop\PrestaShop\Core\Product\Search\SortOrder Object
+                (
+                    [entity:PrestaShop\PrestaShop\Core\Product\Search\SortOrder:private] => product
+                    [field:PrestaShop\PrestaShop\Core\Product\Search\SortOrder:private] => position
+                    [direction:PrestaShop\PrestaShop\Core\Product\Search\SortOrder:private] => asc
+                    [label:PrestaShop\PrestaShop\Core\Product\Search\SortOrder:private] => 
+                )
+
+        )
+
+    [cookie] => Cookie Object
+        ( ......
+        )
+
+    [cart] => Cart Object
+        ( ....
+        )
+
+    [altern] => 1
+)
+
+pas de queryBuilder (prestaShop 1.7.8) 

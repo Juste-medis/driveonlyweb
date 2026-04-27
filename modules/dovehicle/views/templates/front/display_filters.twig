@@ -21,7 +21,8 @@
 .facet-title {
     font-size: 1.1em;
     font-weight: 500;
-    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 1px;
 }
 .dovehicle-attribute-name{
     font-weight: 500;
@@ -49,14 +50,100 @@
     box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 0px; 
 
 }
+.do-vehicle-middle-title{
+    font-size: 1.3em;
+    font-weight: 500;
+}
+.do-vehicle-sep-24{
+    display: block;
+    height: 8px;
+    margin-top: 36px;
+    border-top: 1px solid #eee;
+}
+
+.do-vehicle-sep-12{
+         display: block;
+height: 15px; 
+}
+
     </style>
     <p class="text-uppercase h6 hidden-md-down">Filtres produits</p>
-    
+ 
     <div class="do-vehicle-facets-wrapper">
-        {* ─── ATTRIBUTS (Variantes produit) ─── *}
-        
+
+{* ─── SÉLECTEURS VÉHICULE ─── *}
+{if $dovehicle_manufacturers|count > 0}
+    <div class="facet clearfix">
+        <p class="facet-title hidden-md-down">{l s='Marque' mod='dovehicle'}</p>
+        <select id="dov-filter-manufacturer" class="form-control custom-select">
+            <option value="">{l s='— Toutes marques —' mod='dovehicle'}</option>
+            {foreach from=$dovehicle_manufacturers item="manufacturer"}
+                <option value="{$manufacturer.id_manufacturer}">
+                    {$manufacturer.name} <span class="magnitude">({$manufacturer.count})</span>
+                </option>
+            {/foreach}
+        </select>
+    </div>
+
+    <div class="facet clearfix">
+        <p class="facet-title hidden-md-down">{l s='Modèle' mod='dovehicle'}</p>
+        <select id="dov-filter-model" class="form-control custom-select" disabled>
+            <option value="">{l s='— Tous modèles —' mod='dovehicle'}</option>
+            {foreach from=$dovehicle_models item="model"}
+                <option
+                    value="{$model.id_do_vehicle_model}"
+                    data-manufacturer="{$model.id_manufacturer}"
+                >
+                    {$model.name} <span class="magnitude">({$model.count})</span>
+                </option>
+            {/foreach}
+        </select>
+    </div>
+
+    <div class="facet clearfix">
+        <p class="facet-title hidden-md-down">{l s='Motorisation' mod='dovehicle'}</p>
+        <select id="dov-filter-engine" class="form-control custom-select" disabled>
+            <option value="">{l s='— Toutes motorisations —' mod='dovehicle'}</option>
+            {foreach from=$dovehicle_engines item="engine"}
+                <option
+                    value="{$engine.id_do_vehicle_engine}"
+                    data-model="{$engine.id_do_vehicle_model}"
+                >
+                    {$engine.name} ({$engine.count})
+                </option>
+            {/foreach}
+        </select>
+    </div>
+
+    <div class="facet clearfix">
+        <p class="facet-title hidden-md-down">{l s='Famille produit' mod='dovehicle'}</p>
+        <select id="dov-filter-family" class="form-control custom-select">
+            <option value="">{l s='— Toutes familles —' mod='dovehicle'}</option>
+            {foreach from=$dovehicle_families item="family"}
+                {if $family.id_parent === null}
+                    <option value="{$family.id_do_product_family}">
+                        {$family.name} ({$family.count})
+                    </option>
+                {else}
+                    <option value="{$family.id_do_product_family}">
+                        &nbsp;&nbsp;↳ {$family.name} ({$family.count})
+                    </option>
+                {/if}
+            {/foreach}
+        </select>
+    </div>
 
 
+    <div class="facet clearfix last">
+        <button type="button" class="dovehicle-reset-filters btn btn-secondary btn-block">
+            {l s='Réinitialiser' mod='dovehicle'}
+        </button>
+    </div>
+
+    <span class="do-vehicle-sep-24"> </span>
+{/if}
+
+        {* ─── ATTRIBUTS (Variantes produit) ─── *} 
 {foreach from=$dovehicle_attributes item="attributeGroup" name="attributes"}
 
     {if $attributeGroup.attributes|count == 1
@@ -134,6 +221,10 @@
 
 {/foreach}
 
+                <span class="do-vehicle-sep-24"> </span>
+                <span class="do-vehicle-middle-title">{l s='Caractéristiques' mod='dovehicle'}</span>
+                <span class="do-vehicle-sep-12"> </span>
+  
 {foreach from=$dovehicle_features item="feature" name="features"}
 
     {if $feature.values|count == 1
@@ -209,16 +300,15 @@
         </div>
 
     {/if}
-
 {/foreach}
-
-
-
-
-
-
-
 
     </div>
 </div>
 {/if}
+<script>
+(function(){
+  window.DOVEHICLE_FO = {
+    ajax_url:    '{$dovehicle_ajax_url|escape:'javascript'}', 
+  };
+})();
+</script>

@@ -41,8 +41,7 @@ class Dovehicle extends Module
 
     private const HOOKS = [
         // BO Produit
-        'displayAdminProductsMainStepLeftColumnBottom',
- 
+        'displayAdminProductsMainStepLeftColumnBottom', 
         'actionProductSave', 
         'actionProductAdd',
         // FO
@@ -53,8 +52,8 @@ class Dovehicle extends Module
         "displayLeftColumn",
         // Nav
         'moduleRoutes',
-        //Search
-        'filterProductSearch'
+        //Search 
+        'actionProductSearchProviderRunQueryAfter'
     ];
 
     public function __construct()
@@ -94,7 +93,7 @@ class Dovehicle extends Module
 
     public function hookdisplayLeftColumn($params)
     {
-        try { 
+      try {
             $categoryVar = $this->context->smarty->getTemplateVars()['category']?? null;
   
             if ($categoryVar) { 
@@ -107,151 +106,270 @@ class Dovehicle extends Module
                     $idCategory = (int) $category->id;
                 }
             }
-
             if (!$idCategory) {
                 return '';
             }
 
             $filtersRepo = new CategoryFiltersRepository();
             $idLang = (int) $this->context->language->id;
+            $summary = $filtersRepo->getCategoryFiltersSummary($idCategory, $idLang);
 
- 
-            // Récupérer attributs et caractéristiques
-            $attributes = $filtersRepo->getAttributesWithValuesByCategory($idCategory, $idLang);
-            $features = $filtersRepo->getFeaturesByCategory($idCategory, $idLang);
+
+        $attributes = $filtersRepo->getAttributesWithValuesByCategory($summary);
+        $features = $filtersRepo->getFeaturesByCategory($summary);
+
+        $manufacturers = $filtersRepo->getManufacturersByCategory($summary);
+        $models = $filtersRepo->getModelsByCategory($summary);
+        $engines = $filtersRepo->getEnginesByCategory($summary);
+        $families = $filtersRepo->getFamiliesByCategory($summary);
+
 
             // Passer les données au template
             $dataassign = [
                 'dovehicle_attributes' => $attributes,
                 'dovehicle_features'   => $features,
                 'dovehicle_id_category' => $idCategory,
-                'dovehicle_ajax_url'   => $this->context->link->getModuleLink('dovehicle', 'filters'),
+                'dovehicle_manufacturers' => $manufacturers,
+                'dovehicle_models' => $models,
+                'dovehicle_engines' => $engines,
+                'dovehicle_families' => $families,
+                'dovehicle_ajax_url'   => $this->context->link->getModuleLink('dovehicle', 'vehicle', ['id_manufacturer' => 0, 'id_model' => 0, 'id_engine' => 0], true),
+                'dovehicle_fo_token'          => Tools::encrypt('dovehicle_fo'),
+
             ];
             $this->context->smarty->assign( $dataassign );
- 
+
+            
             return $this->display(__FILE__, 'views/templates/front/display_filters.twig');
-        } catch (\Exception $e) {
+        } catch (\Exception $e) { 
             myprint("ERREUR dans hookdisplayLeftColumn: " . $e->getMessage());  
+            //stacktrace dans logs PS
+            myprint($e->getTraceAsString());
             return '';
         }
     }
+  
  
-    public function hookFilterProductSearch($params)
-    {
-        $searchQuery = $_GET;
+public function hookActionProductSearchProviderRunQueryAfter(array $params)
+{
+    $result = $params['result'] ?? null;
 
-        $idCategory      = (int) ($searchQuery['id_category'] ?? 0);
-        $idLang          = (int) ($searchQuery['id_lang'] ?? (int) Context::getContext()->language->id);
-        $attributeIds    = isset($searchQuery['attributes']) ? array_map('intval', (array) $searchQuery['attributes']) : [];
-        $featureValueIds = isset($searchQuery['features'])   ? array_map('intval', (array) $searchQuery['features'])   : [];
+    if (!$result) {
+        return;
+    }
 
-        if (!$idCategory || (empty($attributeIds) && empty($featureValueIds))) {
-            return;
+    $get = $_GET;
+
+    $idCategory      = (int) ($get['id_category'] ?? 0);
+    $attributeIds    = isset($get['attributes']) ? array_map('intval', (array) $get['attributes']) : [];
+    $featureValueIds = isset($get['features']) ? array_map('intval', (array) $get['features']) : [];
+    $idManufacturer  = (int) ($get['dov_manufacturer'] ?? 0);
+    $idModel         = (int) ($get['dov_model'] ?? 0);
+    $idEngine        = (int) ($get['dov_engine'] ?? 0);
+    $idFamily        = (int) ($get['dov_family'] ?? 0);
+
+    if (
+        empty($attributeIds) &&
+        empty($featureValueIds) &&
+        !$idManufacturer &&
+        !$idModel &&
+        !$idEngine &&
+        !$idFamily
+    ) {
+        return;
+    }
+
+    $productIds = $this->getFilteredProductIds(
+        $idCategory,
+        $attributeIds,
+        $featureValueIds,
+        $idManufacturer,
+        $idModel,
+        $idEngine,
+        $idFamily
+    );
+ 
+    if (empty($productIds)) {
+        $result->setProducts([]);
+        $result->setTotalProductsCount(0);
+        return;
+    } 
+
+    $products = $result->getProducts();
+    
+    //transforrmer $productIds en ([["id_product" => 12], ["id_product" => 45], ...]) pour comparaison avec $products
+    $productIds = array_map(function ($id) {
+        return ['id_product' => $id];
+    }, $productIds);
+
+ 
+    $filtered =  $productIds; 
+    $query = $params['query'] ?? null;
+
+    $page = (int) Tools::getValue('page', 0);
+    if ($page <= 0 && $query && method_exists($query, 'getPage')) {
+        $page = (int) $query->getPage();
+    }
+    $page = max(1, $page);
+
+    $perPage = (int) Tools::getValue('resultsPerPage', 0);
+    if ($perPage <= 0 && $query && method_exists($query, 'getResultsPerPage')) {
+        $perPage = (int) $query->getResultsPerPage();
+    }
+    if ($perPage <= 0) {
+        $perPage = (int) Tools::getValue('n', 12);
+    }
+    $perPage = max(1, $perPage);
+    $totalFiltered = count($filtered);
+
+    $offset = ($page - 1) * $perPage;
+    $finalfiltered = array_slice($filtered, $offset, $perPage);
+
+
+if (empty($finalfiltered)) { 
+             $page = 1; 
+        $offset = ($page - 1) * $perPage;
+    $finalfiltered = array_slice($filtered, $offset, $perPage);
+
+    }   
+
+
+ // Ajouter une donnée personnalisée
+        $result->my_custom_data = [
+            'foo' => 'bar',
+            'timestamp' => time(),
+        ];
+
+
+
+$result->setProducts($finalfiltered);
+    $result->setTotalProductsCount($totalFiltered);
+    return; 
+}
+                
+    private function getFilteredProductIds(
+            int   $idCategory,
+            array $attributeIds      = [],
+            array $featureValueIds   = [],
+            int   $idManufacturer    = 0,
+            int   $idModel           = 0,
+            int   $idEngine          = 0,
+            int   $idFamily          = 0
+        ): array {
+            $db = Db::getInstance();
+            $ps = _DB_PREFIX_;
+ 
+             $db->execute('SET SESSION group_concat_max_len = 1000000');
+
+            $sql = '
+                WITH RECURSIVE category_branch AS (
+                    SELECT c.id_category
+                    FROM `' . $ps . 'category` c
+                    WHERE c.id_category = ' . (int) $idCategory . '
+                    AND c.active = 1
+
+                    UNION ALL
+
+                    SELECT c.id_category
+                    FROM `' . $ps . 'category` c
+                    INNER JOIN category_branch cb ON cb.id_category = c.id_parent
+                    WHERE c.active = 1
+                ),
+
+                product_scope AS (
+                    SELECT DISTINCT cp.id_product
+                    FROM `' . $ps . 'category_product` cp
+                    INNER JOIN category_branch cb ON cb.id_category = cp.id_category
+                    INNER JOIN `' . $ps . 'product` p
+                        ON p.id_product = cp.id_product
+                )
+
+                SELECT ps.id_product
+                FROM product_scope ps
+                WHERE 1=1
+            ';
+
+            // ── Attributs (déclinaisons) ─────────────────────────────────────────
+            if (!empty($attributeIds)) {
+                $sql .= '
+                AND EXISTS (
+                    SELECT 1
+                    FROM `' . $ps . 'product_attribute` pa
+                    INNER JOIN `' . $ps . 'product_attribute_combination` pac
+                        ON pac.id_product_attribute = pa.id_product_attribute
+                    INNER JOIN `' . $ps . 'product_attribute_shop` pas
+                        ON pas.id_product_attribute = pa.id_product_attribute
+                       AND pas.id_shop = ' . (int) $this->context->shop->id . '
+                    WHERE pa.id_product = ps.id_product
+                      AND pac.id_attribute IN (' . implode(',', $attributeIds) . ')
+                )';
+            }
+
+            // ── Features (caractéristiques) ──────────────────────────────────────
+            if (!empty($featureValueIds)) {
+                $sql .= '
+                AND EXISTS (
+                    SELECT 1
+                    FROM `' . $ps . 'feature_product` fp
+                    WHERE fp.id_product       = ps.id_product
+                    AND fp.id_feature_value IN (' . implode(',', $featureValueIds) . ')
+                )';
+            }
+
+            // ── Marque véhicule ──────────────────────────────────────────────────
+            if ($idManufacturer > 0) {
+                $sql .= '
+                AND EXISTS (
+                    SELECT 1
+                    FROM `' . $ps . 'do_product_vehicle_compat` vc
+                    WHERE vc.id_product      = ps.id_product
+                    AND vc.id_manufacturer = ' . $idManufacturer . '
+                )';
+            }
+
+            // ── Modèle véhicule ──────────────────────────────────────────────────
+            if ($idModel > 0) {
+                $sql .= '
+                AND EXISTS (
+                    SELECT 1
+                    FROM `' . $ps . 'do_product_vehicle_compat` vc
+                    WHERE vc.id_product          = ps.id_product
+                    AND vc.id_do_vehicle_model = ' . $idModel . '
+                )';
+            }
+
+            // ── Motorisation ─────────────────────────────────────────────────────
+            if ($idEngine > 0) {
+                $sql .= '
+                AND EXISTS (
+                    SELECT 1
+                    FROM `' . $ps . 'do_product_vehicle_compat` vc
+                    WHERE vc.id_product           = ps.id_product
+                    AND vc.id_do_vehicle_engine = ' . $idEngine . '
+                )';
+            }
+
+            // ── Famille produit ──────────────────────────────────────────────────
+            if ($idFamily > 0) {
+                $sql .= '
+                AND EXISTS (
+                    SELECT 1
+                    FROM `' . $ps . 'do_product_family_link` fl
+                    WHERE fl.id_product          = ps.id_product
+                    AND fl.id_do_product_family = ' . $idFamily . '
+                )';
+            }
+
+            $resource = $db->query($sql); 
+            if (!$resource) {
+                return [];
+            }
+
+            return array_column($resource->fetchAll(\PDO::FETCH_ASSOC), 'id_product');
         }
 
-        $productIds = $this->getFilteredProductIds($idCategory, $attributeIds, $featureValueIds);
 
-        // On injecte les IDs dans le contexte pour que le controller category les utilise
-        // PS 1.7 : on surcharge via hook actionProductSearchProviderRunQueryBefore
-        // ou on passe par assignation Smarty + JS selon votre architecture
-        Context::getContext()->smarty->assign([
-            'dovehicle_filtered_ids'   => $productIds,
-            'dovehicle_filtered_count' => count($productIds),
-        ]);
-    }
 
-/**
- * Retourne les IDs produits correspondant aux filtres attributs ET features
- * Logique : intersection (AND entre groupes, OR au sein d'un groupe)
- *
- * Exemple :
- *   attributeIds    = [1053, 1011]  → produits ayant l'attr 1053 OU 1011
- *   featureValueIds = [208]         → ET ayant la feature_value 208
- */
-private function getFilteredProductIds(
-    int   $idCategory,
-    array $attributeIds,
-    array $featureValueIds
-    ) {
-    $db = Db::getInstance();
-    $ps = _DB_PREFIX_;
-
-    // ── Étape 1 : scope produits actifs de la catégorie (récursif) ──────────
-    // On réutilise la même CTE que getCategoryFiltersSummary
-    $db->execute('SET SESSION group_concat_max_len = 1000000');
-
-    // ── Étape 2 : construire la requête d'intersection ───────────────────────
-    // Stratégie :
-    //   - Pour les attributs   : un produit doit avoir AU MOINS UN des id_attribute sélectionnés
-    //   - Pour les features    : un produit doit avoir AU MOINS UNE des id_feature_value sélectionnées
-    //   - Entre les deux blocs : ET (intersection)
-    //
-    // Si on veut un AND strict par groupe d'attributs (ex : Couleur=Rouge ET Taille=XL),
-    // remplacer le HAVING par autant de EXISTS qu'il y a de groupes distincts.
-
-    $sql = '
-        WITH RECURSIVE category_branch AS (
-            SELECT c.id_category
-            FROM `' . $ps . 'category` c
-            WHERE c.id_category = ' . $idCategory . '
-              AND c.active = 1
-
-            UNION ALL
-
-            SELECT c.id_category
-            FROM `' . $ps . 'category` c
-            INNER JOIN category_branch cb ON cb.id_category = c.id_parent
-            WHERE c.active = 1
-        ),
-
-        product_scope AS (
-            SELECT DISTINCT cp.id_product
-            FROM `' . $ps . 'category_product` cp
-            INNER JOIN category_branch cb ON cb.id_category = cp.id_category
-            INNER JOIN `' . $ps . 'product` p ON p.id_product = cp.id_product AND p.active = 1
-        )
-
-        SELECT ps.id_product
-        FROM product_scope ps
-        WHERE 1=1
-    ';
-
-    // ── Filtre attributs ────────────────────────────────────────────────────
-    if (!empty($attributeIds)) {
-        $placeholders = implode(',', $attributeIds);
-        $sql .= '
-        AND EXISTS (
-            SELECT 1
-            FROM `' . $ps . 'product_attribute` pa
-            INNER JOIN `' . $ps . 'product_attribute_combination` pac
-                ON pac.id_product_attribute = pa.id_product_attribute
-            WHERE pa.id_product = ps.id_product
-              AND pac.id_attribute IN (' . $placeholders . ')
-        )';
-    }
-
-    // ── Filtre features ─────────────────────────────────────────────────────
-    if (!empty($featureValueIds)) {
-        $placeholders = implode(',', $featureValueIds);
-        $sql .= '
-        AND EXISTS (
-            SELECT 1
-            FROM `' . $ps . 'feature_product` fp
-            WHERE fp.id_product = ps.id_product
-              AND fp.id_feature_value IN (' . $placeholders . ')
-        )';
-    }
-
-    $resource = $db->query($sql);
-
-    if (!$resource) {
-        return [];
-    }
-
-    $rows = $resource->fetchAll(\PDO::FETCH_ASSOC);
-
-    return array_column($rows, 'id_product');
-} 
 
     public function hookDisplayAdminProductsMainStepLeftColumnBottom($params)
     {
@@ -512,8 +630,7 @@ private function getFilteredProductIds(
             $compatJson   = $productData['dovehicle_compat_json'] ?? '[]';
             $familiesJson = $productData['dovehicle_families_json'] ?? '[]';
                 
-                myprint($compatJson);
-         
+          
             $compats   = json_decode($compatJson, true)   ?: [];
             $families  = json_decode($familiesJson, true) ?: []; 
  
@@ -572,54 +689,14 @@ private function getFilteredProductIds(
         $modelRepo =  new VehicleModelRepository();
 
         // Véhicule actuellement sélectionné (cookie ou session)
-        $selectedVehicle = $this->getSelectedVehicleFromContext();
-
+ 
         $this->context->smarty->assign([
             'dovehicle_manufacturers'     => $this->getManufacturerList(),
-            'dovehicle_selected_vehicle'  => $selectedVehicle,
-            'dovehicle_ajax_url_fo'       => "", //$this->context->link->getModuleLink($this->name, 'vehicle'),
-            'dovehicle_fo_token'          => Tools::encrypt('dovehicle_fo'),
+            'dovehicle_ajax_url_fo'       =>    $this->context->link->getModuleLink('dovehicle', 'vehicle', ['id_manufacturer' => 0, 'id_model' => 0, 'id_engine' => 0], true),
         ]);
 
         return $this->display(__FILE__, 'views/templates/front/vehicle_selector.tpl');
-    }
-
-    /**
-     * Récupère le véhicule sélectionné depuis le cookie ou la session
-     */
-    public function getSelectedVehicleFromContext(): array
-    {
-        $cookie = $this->context->cookie;
-
-        $idEngine = isset($cookie->dovehicle_engine) ? (int) $cookie->dovehicle_engine : 0;
-        $idModel  = isset($cookie->dovehicle_model)  ? (int) $cookie->dovehicle_model  : 0;
-        $idBrand  = isset($cookie->dovehicle_brand)  ? (int) $cookie->dovehicle_brand  : 0;
-
-        if (!$idBrand) {
-            return [];
-        }
-
-        $engineRepo = new VehicleEngineRepository();
-        $modelRepo  =  new VehicleModelRepository();
-
-        $result = [
-            'id_manufacturer'      => $idBrand,
-            'id_do_vehicle_model'  => $idModel,
-            'id_do_vehicle_engine' => $idEngine,
-        ];
-
-        if ($idModel) {
-            $model = $modelRepo->findById($idModel);
-            $result['model_name'] = $model ? $model['name'] : '';
-        }
-
-        if ($idEngine) {
-            $engine = $engineRepo->findById($idEngine);
-            $result['engine_name'] = $engine ? $engine['name'] : '';
-        }
-
-        return $result;
-    }
+    } 
 
     // ─────────────────────────────────────────────────────────────────────────
     // HOOKS — ROUTES
@@ -633,7 +710,7 @@ private function getFilteredProductIds(
                 'rule'       => 'vehicule/{id_manufacturer}/{id_model}/{id_engine}',
                 'keywords'   => [
                     'id_manufacturer' => ['regexp' => '[0-9]+', 'param' => 'id_manufacturer'],
-                    'id_model'        => ['regexp' => '[0-9]+', 'param' => 'id_model'],
+                    'id_model'            => ['regexp' => '[0-9]+', 'param' => 'id_model'],
                     'id_engine'       => ['regexp' => '[0-9]+', 'param' => 'id_engine'],
                 ],
                 'params' => [

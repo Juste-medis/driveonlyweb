@@ -61,13 +61,25 @@ class DovehicleFiltersModuleFrontController extends ModuleFrontController
         $filtersRepo = new CategoryFiltersRepository();
         $idLang = (int) $this->context->language->id;
 
+        $summary = $filtersRepo->getCategoryFiltersSummary($idCategory, $idLang);
+
+
         $attributes = $filtersRepo->getAttributesWithValuesByCategory($idCategory, $idLang);
-        $features = $filtersRepo->getFeaturesByCategory($idCategory, $idLang);
+        $features = $filtersRepo->getFeaturesByCategory($summary);
+
+        $manufacturers = $filtersRepo->getManufacturersByCategory($summary);
+        $models = $filtersRepo->getModelsByCategory($summary);
+        $engines = $filtersRepo->getEnginesByCategory($summary);
+        $families = $filtersRepo->getFamiliesByCategory($summary);
 
         $this->ajaxDie(json_encode([
             'success' => true,
             'attributes' => $attributes,
             'features' => $features,
+            'manufacturers' => $manufacturers,
+            'models' => $models,
+            'engines' => $engines,
+            'families' => $families,
         ], JSON_UNESCAPED_UNICODE));
     }
 

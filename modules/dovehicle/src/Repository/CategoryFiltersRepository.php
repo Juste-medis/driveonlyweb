@@ -34,7 +34,6 @@ class CategoryFiltersRepository
                 INNER JOIN `' . self::DB_PREFIX . 'attribute_group` ag ON a.`id_attribute_group` = ag.`id_attribute_group`
                 INNER JOIN `' . self::DB_PREFIX . 'attribute_group_lang` agl ON ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = ' . (int)$idLang . '
                 WHERE cp.`id_category` = ' . (int)$idCategory . '
-                AND p.`active` = 1
                 ORDER BY ag.`position` ASC';
 
         return Db::getInstance()->executeS($sql) ?: [];
@@ -62,7 +61,7 @@ class CategoryFiltersRepository
     $db->execute('SET SESSION group_concat_max_len = 1000000');
     $ps = self::DB_PREFIX;
  
-$sql = '
+    $sql = '
     WITH RECURSIVE category_branch AS (
         SELECT c.id_category
         FROM `' . $ps . 'category` c
@@ -100,7 +99,7 @@ $sql = '
     features_distinct AS (
         SELECT DISTINCT
             fp.id_feature,
-            fl.name AS feature_name,
+            fl.name  AS feature_name,
             fp.id_feature_value,
             fvl.value AS feature_value
         FROM product_scope ps
@@ -170,7 +169,7 @@ $sql = '
             a.id_attribute_group,
             agl.name AS attribute_group_name,
             a.id_attribute,
-            al.name AS attribute_name
+            al.name  AS attribute_name
         FROM product_scope ps
         INNER JOIN `' . $ps . 'product_attribute` pa
             ON pa.id_product = ps.id_product
@@ -223,10 +222,70 @@ $sql = '
         GROUP BY
             duv.id_attribute_group,
             duv.attribute_group_name
+    ),
+
+    manufacturers_scope AS (
+        SELECT
+            m.id_manufacturer,
+            m.name AS manufacturer_name,
+            COUNT(DISTINCT vc.id_product) AS product_count
+        FROM product_scope ps
+        INNER JOIN `' . $ps . 'do_product_vehicle_compat` vc
+            ON vc.id_product = ps.id_product
+        INNER JOIN `' . $ps . 'manufacturer` m
+            ON m.id_manufacturer = vc.id_manufacturer
+        WHERE vc.id_manufacturer IS NOT NULL
+        GROUP BY m.id_manufacturer, m.name
+    ),
+
+    models_scope AS (
+        SELECT
+            vm.id_do_vehicle_model,
+            vm.id_manufacturer,
+            vm.name AS model_name,
+            COUNT(DISTINCT vc.id_product) AS product_count
+        FROM product_scope ps
+        INNER JOIN `' . $ps . 'do_product_vehicle_compat` vc
+            ON vc.id_product = ps.id_product
+        INNER JOIN `' . $ps . 'do_vehicle_model` vm
+            ON vm.id_do_vehicle_model = vc.id_do_vehicle_model
+        WHERE vc.id_do_vehicle_model IS NOT NULL
+        GROUP BY vm.id_do_vehicle_model, vm.id_manufacturer, vm.name
+    ),
+
+    engines_scope AS (
+        SELECT
+            ve.id_do_vehicle_engine,
+            ve.id_do_vehicle_model,
+            ve.name AS engine_name,
+            COUNT(DISTINCT vc.id_product) AS product_count
+        FROM product_scope ps
+        INNER JOIN `' . $ps . 'do_product_vehicle_compat` vc
+            ON vc.id_product = ps.id_product
+        INNER JOIN `' . $ps . 'do_vehicle_engine` ve
+            ON ve.id_do_vehicle_engine = vc.id_do_vehicle_engine
+        WHERE vc.id_do_vehicle_engine IS NOT NULL
+        GROUP BY ve.id_do_vehicle_engine, ve.id_do_vehicle_model, ve.name
+    ),
+
+    families_scope AS (
+        SELECT
+            f.id_do_product_family,
+            f.id_parent,
+            f.name AS family_name,
+            COUNT(DISTINCT fl.id_product) AS product_count
+        FROM product_scope ps
+        INNER JOIN `' . $ps . 'do_product_family_link` fl
+            ON fl.id_product = ps.id_product
+        INNER JOIN `' . $ps . 'do_product_family` f
+            ON f.id_do_product_family = fl.id_do_product_family
+        WHERE f.active = 1
+        GROUP BY f.id_do_product_family, f.id_parent, f.name
     )
 
     SELECT
         ' . $idCategory . ' AS id_category,
+
         COALESCE(
             (
                 SELECT CONCAT(
@@ -247,6 +306,7 @@ $sql = '
             ),
             \'[]\'
         ) AS caracteristiques,
+
         COALESCE(
             (
                 SELECT CONCAT(
@@ -266,7 +326,94 @@ $sql = '
                 FROM declinations_grouped dg
             ),
             \'[]\'
-        ) AS declinaisons
+        ) AS declinaisons,
+
+        COALESCE(
+            (
+                SELECT CONCAT(
+                    \'[\',
+                    GROUP_CONCAT(
+                        CONCAT(
+                            \'{"id_manufacturer":\', ms.id_manufacturer,
+                            \',"name":\', JSON_QUOTE(ms.manufacturer_name),
+                            \',"count":\', ms.product_count,
+                            \'}\'
+                        )
+                        ORDER BY ms.manufacturer_name
+                        SEPARATOR \',\'
+                    ),
+                    \']\'
+                )
+                FROM manufacturers_scope ms
+            ),
+            \'[]\'
+        ) AS marques,
+
+        COALESCE(
+            (
+                SELECT CONCAT(
+                    \'[\',
+                    GROUP_CONCAT(
+                        CONCAT(
+                            \'{"id_do_vehicle_model":\', mo.id_do_vehicle_model,
+                            \',"id_manufacturer":\', mo.id_manufacturer,
+                            \',"name":\', JSON_QUOTE(mo.model_name),
+                            \',"count":\', mo.product_count,
+                            \'}\'
+                        )
+                        ORDER BY mo.model_name
+                        SEPARATOR \',\'
+                    ),
+                    \']\'
+                )
+                FROM models_scope mo
+            ),
+            \'[]\'
+        ) AS modeles,
+
+        COALESCE(
+            (
+                SELECT CONCAT(
+                    \'[\',
+                    GROUP_CONCAT(
+                        CONCAT(
+                            \'{"id_do_vehicle_engine":\', en.id_do_vehicle_engine,
+                            \',"id_do_vehicle_model":\', en.id_do_vehicle_model,
+                            \',"name":\', JSON_QUOTE(en.engine_name),
+                            \',"count":\', en.product_count,
+                            \'}\'
+                        )
+                        ORDER BY en.engine_name
+                        SEPARATOR \',\'
+                    ),
+                    \']\'
+                )
+                FROM engines_scope en
+            ),
+            \'[]\'
+        ) AS motorisations,
+
+        COALESCE(
+            (
+                SELECT CONCAT(
+                    \'[\',
+                    GROUP_CONCAT(
+                        CONCAT(
+                            \'{"id_do_product_family":\', fa.id_do_product_family,
+                            \',"id_parent":\', COALESCE(fa.id_parent, \'null\'),
+                            \',"name":\', JSON_QUOTE(fa.family_name),
+                            \',"count":\', fa.product_count,
+                            \'}\'
+                        )
+                        ORDER BY fa.id_parent IS NOT NULL, fa.family_name
+                        SEPARATOR \',\'
+                    ),
+                    \']\'
+                )
+                FROM families_scope fa
+            ),
+            \'[]\'
+        ) AS familles
 '; 
                 $resource = Db::getInstance()->query($sql); 
     if (!$resource) {
@@ -289,14 +436,9 @@ $sql = '
      * @param int $idLang ID de la langue
      * @return array
      */
-    public function getAttributesWithValuesByCategory(int $idCategory, int $idLang): array
-    {
-
-    //get filter summary 
-    $summary = $this->getCategoryFiltersSummary($idCategory, $idLang);
- 
-        
-$results = $summary['declinaisons'] ?? [];
+    public function getAttributesWithValuesByCategory($summary): array
+    {  
+        $results = $summary['declinaisons'] ?? [];
  
         // Grouper par groupe d'attributs
         $grouped = [];
@@ -329,10 +471,8 @@ $results = $summary['declinaisons'] ?? [];
      * @param int $idLang ID de la langue
      * @return array
      */
-    public function getFeaturesByCategory(int $idCategory, int $idLang): array
-    { 
-        $summary = $this->getCategoryFiltersSummary($idCategory, $idLang);
-
+    public function getFeaturesByCategory($summary)
+    {  
         $results = $summary['caracteristiques'] ?? [];
         // Grouper par feature
         $grouped = [];
@@ -357,6 +497,82 @@ $results = $summary['declinaisons'] ?? [];
         return array_values($grouped);
     }
 
+    public function getManufacturersByCategory( $summary)
+    {  
+        $results = $summary['marques'] ?? "[]"; 
+         $results = json_decode($results, true) ?: [];
+         $grouped = [];
+        foreach ($results as $row) {
+            $featureId = $row['id_manufacturer'];
+            if (!isset($grouped[$featureId])) {
+                $grouped[$featureId] = [
+                    'id_manufacturer' => $row['id_manufacturer'],
+                    'name' => $row['name'],
+                    'count' => $row['count'],
+                ];
+            }  
+        } 
+        return array_values($grouped);
+    }
+    public function getModelsByCategory( $summary)
+    {  
+        $results = $summary['modeles'] ?? "[]"; 
+         $results = json_decode($results, true) ?: [];
+
+        $grouped = [];
+        foreach ($results as $row) {
+                $featureId = $row['id_do_vehicle_model'];
+            if (!isset($grouped[$featureId])) {
+                $grouped[$featureId] = [
+                    'id_do_vehicle_model' => $row['id_do_vehicle_model'],
+                    'id_manufacturer' => $row['id_manufacturer'],
+                    'name' => $row['name'],
+                    'count' => $row['count'],
+                ];
+            }  
+        } 
+        return array_values($grouped);
+    }
+
+    public function getEnginesByCategory( $summary)
+    {  
+        $results = $summary['motorisations'] ?? "[]"; 
+         $results = json_decode($results, true) ?: [];
+
+        $grouped = [];
+        foreach ($results as $row) {
+            $featureId = $row['id_do_vehicle_engine'];
+            if (!isset($grouped[$featureId])) {
+                $grouped[$featureId] = [
+                    'id_do_vehicle_engine' => $row['id_do_vehicle_engine'],
+                    'id_do_vehicle_model' => $row['id_do_vehicle_model'],
+                    'name' => $row['name'],
+                    'count' => $row['count'],
+                ];
+            }  
+        } 
+        return array_values($grouped);
+    }
+    public function getFamiliesByCategory( $summary)
+    {  
+        $results = $summary['familles'] ?? "[]"; 
+         $results = json_decode($results, true) ?: [];
+        $grouped = [];
+        foreach ($results as $row) {
+            $featureId = $row['id_do_product_family'];
+            if (!isset($grouped[$featureId])) {
+                $grouped[$featureId] = [
+                    'id_do_product_family' => $row['id_do_product_family'],
+                    'id_parent' => $row['id_parent'],
+                    'name' => $row['name'],
+                    'count' => $row['count'],
+                ];
+            }  
+        } 
+        return array_values($grouped);
+    }
+
+
     /**
      * Récupère les produits filtrés par attributs et caractéristiques
      *
@@ -377,8 +593,7 @@ $results = $summary['declinaisons'] ?? [];
         $query = 'SELECT DISTINCT p.`id_product`
                   FROM `' . self::DB_PREFIX . 'product` p
                   INNER JOIN `' . self::DB_PREFIX . 'category_product` cp ON p.`id_product` = cp.`id_product`
-                  WHERE cp.`id_category` = ' . (int)$idCategory . '
-                  AND p.`active` = 1';
+                  WHERE cp.`id_category` = ' . (int)$idCategory  ;
 
         // Ajouter le filtre par attributs si présent
         if (!empty($attributeIds)) {
@@ -426,8 +641,7 @@ $results = $summary['declinaisons'] ?? [];
                         p.id_product
                     FROM `' . self::DB_PREFIX . 'category_product` cp
                     JOIN `' . self::DB_PREFIX . 'product` p
-                        ON p.id_product = cp.id_product
-                        AND p.active = 1
+                        ON p.id_product = cp.id_product 
                     WHERE cp.id_category = ' . (int)$idCategory . '
                 )
                 SELECT
@@ -473,8 +687,7 @@ $results = $summary['declinaisons'] ?? [];
                         p.id_product
                     FROM `' . self::DB_PREFIX . 'category_product` cp
                     JOIN `' . self::DB_PREFIX . 'product` p
-                        ON p.id_product = cp.id_product
-                        AND p.active = 1
+                        ON p.id_product = cp.id_product 
                     WHERE cp.id_category = ' . (int)$idCategory . '
                 )
                 SELECT
@@ -515,8 +728,7 @@ $results = $summary['declinaisons'] ?? [];
                         p.id_product
                     FROM `' . self::DB_PREFIX . 'category_product` cp
                     JOIN `' . self::DB_PREFIX . 'product` p
-                        ON p.id_product = cp.id_product
-                        AND p.active = 1
+                        ON p.id_product = cp.id_product 
                     WHERE cp.id_category = ' . (int)$idCategory . '
                 )
                 SELECT
@@ -556,8 +768,7 @@ $results = $summary['declinaisons'] ?? [];
         $sql = 'SELECT COUNT(DISTINCT p.id_product) as total
                 FROM `' . self::DB_PREFIX . 'category_product` cp
                 JOIN `' . self::DB_PREFIX . 'product` p
-                    ON p.id_product = cp.id_product
-                    AND p.active = 1
+                    ON p.id_product = cp.id_product 
                 WHERE cp.id_category = ' . (int)$idCategory;
 
         $result = Db::getInstance()->executeS($sql);
@@ -587,8 +798,7 @@ $results = $summary['declinaisons'] ?? [];
                 INNER JOIN `' . self::DB_PREFIX . 'attribute_lang` al ON a.id_attribute = al.id_attribute AND al.id_lang = ' . (int)$idLang . '
                 INNER JOIN `' . self::DB_PREFIX . 'attribute_group` ag ON a.id_attribute_group = ag.id_attribute_group
                 INNER JOIN `' . self::DB_PREFIX . 'attribute_group_lang` agl ON ag.id_attribute_group = agl.id_attribute_group AND agl.id_lang = ' . (int)$idLang . '
-                WHERE cp.id_category = ' . (int)$idCategory . '
-                AND p.active = 1
+                WHERE cp.id_category = ' . (int)$idCategory . ' 
                 GROUP BY ag.id_attribute_group, agl.name
                 ORDER BY ag.position ASC';
 
@@ -617,8 +827,7 @@ $results = $summary['declinaisons'] ?? [];
                 INNER JOIN `' . self::DB_PREFIX . 'feature_lang` fl ON f.id_feature = fl.id_feature AND fl.id_lang = ' . (int)$idLang . '
                 INNER JOIN `' . self::DB_PREFIX . 'feature_value` fv ON fp.id_feature_value = fv.id_feature_value
                 INNER JOIN `' . self::DB_PREFIX . 'feature_value_lang` fvl ON fv.id_feature_value = fvl.id_feature_value AND fvl.id_lang = ' . (int)$idLang . '
-                WHERE cp.id_category = ' . (int)$idCategory . '
-                AND p.active = 1
+                WHERE cp.id_category = ' . (int)$idCategory . ' 
                 GROUP BY f.id_feature, fl.name
                 ORDER BY f.position ASC';
 

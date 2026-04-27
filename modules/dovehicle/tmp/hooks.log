@@ -7395,7 +7395,7 @@
     [id_hook] => 147
     [name] => displayAdminProductsSeoStepBottom
     [title] => Display new elements in back office product page, SEO tab
-    [description] => This hook launches modules when the back office product page is displayed
+    [description] => This hooktmp launches modules when the back office product page is displayed
     [active] => 1
     [position] => 1
 )

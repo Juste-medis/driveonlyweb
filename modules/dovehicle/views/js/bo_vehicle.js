@@ -219,7 +219,7 @@
             return;
         }
 
-        const newItem = {
+        let newItem = {
             id_compat: 0,    // 0 = non encore persisté
             id_manufacturer: idBrand,
             manufacturer_name: $brandSel.find('option:selected').text(),
@@ -230,9 +230,13 @@
             note: note,
         };
 
-        appendCompatRow(newItem, compatList.length - 1);
+        addCompatAjax(newItem, function (resp) {
+            newItem.id_compat = resp.id_compat;
+            appendCompatRow(newItem, compatList.length - 1);
 
-        addCompatAjax(newItem, function () { });
+        });
+
+
 
 
         // Remettre les selects
@@ -402,7 +406,7 @@
             },
             success: function (resp) {
                 if (resp.success) {
-                    callback();
+                    callback(resp);
                 } else {
                     alert('Erreur lors de l\'ajout.');
                 }

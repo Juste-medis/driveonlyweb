@@ -1,0 +1,642 @@
+[
+    {
+        "id_category": 334,
+        "caracteristiques": [
+            {
+                "id_feature": 160,
+                "feature_name": "160mm",
+                "feature_values": [
+                    {
+                        "id_feature_value": 322,
+                        "value": "Oui",
+                        "count": 2
+                    }
+                ]
+            },
+            {
+                "id_feature": 157,
+                "feature_name": "76mm de diamètre d'entrée",
+                "feature_values": [
+                    {
+                        "id_feature_value": 319,
+                        "value": "Oui",
+                        "count": 2
+                    }
+                ]
+            },
+            {
+                "id_feature": 76,
+                "feature_name": "8Db",
+                "feature_values": [
+                    {
+                        "id_feature_value": 238,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 129,
+                "feature_name": "Aluminium brossé",
+                "feature_values": [
+                    {
+                        "id_feature_value": 291,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 216,
+                "feature_name": "Anti brouillard",
+                "feature_values": [
+                    {
+                        "id_feature_value": 378,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 118,
+                "feature_name": "Anti-bulles",
+                "feature_values": [
+                    {
+                        "id_feature_value": 280,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 119,
+                "feature_name": "Anti-rayures",
+                "feature_values": [
+                    {
+                        "id_feature_value": 281,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 166,
+                "feature_name": "Carbone",
+                "feature_values": [
+                    {
+                        "id_feature_value": 328,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 75,
+                "feature_name": "Chicane",
+                "feature_values": [
+                    {
+                        "id_feature_value": 237,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 70,
+                "feature_name": "Coton",
+                "feature_values": [
+                    {
+                        "id_feature_value": 232,
+                        "value": "Oui",
+                        "count": 2
+                    }
+                ]
+            },
+            {
+                "id_feature": 148,
+                "feature_name": "Coudée à 90°",
+                "feature_values": [
+                    {
+                        "id_feature_value": 310,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 74,
+                "feature_name": "Db killer",
+                "feature_values": [
+                    {
+                        "id_feature_value": 236,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 120,
+                "feature_name": "Dimensions au choix",
+                "feature_values": [
+                    {
+                        "id_feature_value": 282,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 146,
+                "feature_name": "Durite",
+                "feature_values": [
+                    {
+                        "id_feature_value": 308,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 147,
+                "feature_name": "Durite D'admission",
+                "feature_values": [
+                    {
+                        "id_feature_value": 309,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 116,
+                "feature_name": "Etirable",
+                "feature_values": [
+                    {
+                        "id_feature_value": 278,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 215,
+                "feature_name": "Feux",
+                "feature_values": [
+                    {
+                        "id_feature_value": 377,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 158,
+                "feature_name": "Garantie à vie",
+                "feature_values": [
+                    {
+                        "id_feature_value": 320,
+                        "value": "Oui",
+                        "count": 2
+                    }
+                ]
+            },
+            {
+                "id_feature": 202,
+                "feature_name": "Jantes",
+                "feature_values": [
+                    {
+                        "id_feature_value": 364,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 159,
+                "feature_name": "Lavable",
+                "feature_values": [
+                    {
+                        "id_feature_value": 321,
+                        "value": "Oui",
+                        "count": 2
+                    }
+                ]
+            },
+            {
+                "id_feature": 201,
+                "feature_name": "Liseret",
+                "feature_values": [
+                    {
+                        "id_feature_value": 363,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 203,
+                "feature_name": "Look",
+                "feature_values": [
+                    {
+                        "id_feature_value": 365,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 86,
+                "feature_name": "Phare",
+                "feature_values": [
+                    {
+                        "id_feature_value": 248,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 127,
+                "feature_name": "Protection",
+                "feature_values": [
+                    {
+                        "id_feature_value": 289,
+                        "value": "Oui",
+                        "count": 2
+                    }
+                ]
+            },
+            {
+                "id_feature": 224,
+                "feature_name": "Protection Réservoir",
+                "feature_values": [
+                    {
+                        "id_feature_value": 386,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 145,
+                "feature_name": "Silicone",
+                "feature_values": [
+                    {
+                        "id_feature_value": 307,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 223,
+                "feature_name": "Tank Pad",
+                "feature_values": [
+                    {
+                        "id_feature_value": 385,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 217,
+                "feature_name": "Teinté",
+                "feature_values": [
+                    {
+                        "id_feature_value": 379,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 117,
+                "feature_name": "Thermoformable",
+                "feature_values": [
+                    {
+                        "id_feature_value": 279,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_feature": 73,
+                "feature_name": "Universel",
+                "feature_values": [
+                    {
+                        "id_feature_value": 235,
+                        "value": "Oui",
+                        "count": 1
+                    }
+                ]
+            }
+        ],
+        "declinaisons": [
+            {
+                "id_attribute_group": 261,
+                "attribute_group_name": "Couleur de liseret",
+                "attribute_values": [
+                    {
+                        "id_attribute": 2642,
+                        "value": "Blanc",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2643,
+                        "value": "Bleu",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2646,
+                        "value": "Jaune",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2644,
+                        "value": "Noir",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2645,
+                        "value": "Orange",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2641,
+                        "value": "Rouge",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2640,
+                        "value": "Vert",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_attribute_group": 243,
+                "attribute_group_name": "Couleur du film",
+                "attribute_values": [
+                    {
+                        "id_attribute": 2546,
+                        "value": "Bleu clair",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2534,
+                        "value": "Bleu foncé",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2535,
+                        "value": "Jaune",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2533,
+                        "value": "Jaune old school",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2531,
+                        "value": "Noir clair",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2530,
+                        "value": "Noir foncé",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2550,
+                        "value": "Orange",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2547,
+                        "value": "Rose",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2548,
+                        "value": "Rouge",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2536,
+                        "value": "Vert",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2549,
+                        "value": "Violet",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_attribute_group": 262,
+                "attribute_group_name": "Couleur du pad caoutchoux",
+                "attribute_values": [
+                    {
+                        "id_attribute": 2648,
+                        "value": "Bleu",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2650,
+                        "value": "Noir",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2647,
+                        "value": "Rouge",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2649,
+                        "value": "Vert",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_attribute_group": 263,
+                "attribute_group_name": "Diamètre d'entrée du cornet",
+                "attribute_values": [
+                    {
+                        "id_attribute": 2651,
+                        "value": "35mm",
+                        "count": 2
+                    },
+                    {
+                        "id_attribute": 2652,
+                        "value": "39mm",
+                        "count": 2
+                    },
+                    {
+                        "id_attribute": 2654,
+                        "value": "42mm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2653,
+                        "value": "48mm",
+                        "count": 2
+                    },
+                    {
+                        "id_attribute": 2655,
+                        "value": "50mm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2656,
+                        "value": "52mm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2657,
+                        "value": "54mm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2658,
+                        "value": "60mm",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_attribute_group": 248,
+                "attribute_group_name": "Diamètre du Db killer",
+                "attribute_values": [
+                    {
+                        "id_attribute": 2570,
+                        "value": "35mm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2574,
+                        "value": "40mm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2573,
+                        "value": "42mm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2572,
+                        "value": "45mm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2575,
+                        "value": "48mm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2576,
+                        "value": "60mm",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "id_attribute_group": 247,
+                "attribute_group_name": "Longueur du Db Killer",
+                "attribute_values": [
+                    {
+                        "id_attribute": 2571,
+                        "value": "14cm",
+                        "count": 1
+                    },
+                    {
+                        "id_attribute": 2569,
+                        "value": "8cm",
+                        "count": 1
+                    }
+                ]
+            }
+        ],
+        "marques": [
+            {
+                "id_manufacturer": 39,
+                "name": "Black Widow",
+                "count": 1
+            },
+            {
+                "id_manufacturer": 20,
+                "name": "DriveOnly",
+                "count": 2
+            },
+            {
+                "id_manufacturer": 7,
+                "name": "HELLA",
+                "count": 3
+            }
+        ],
+        "modeles": [
+            {
+                "id_do_vehicle_model": 2,
+                "id_manufacturer": 20,
+                "name": "Cas-Cr200",
+                "count": 2
+            },
+            {
+                "id_do_vehicle_model": 1,
+                "id_manufacturer": 39,
+                "name": "model1",
+                "count": 1
+            }
+        ],
+        "motorisations": [
+            {
+                "id_do_vehicle_engine": 2,
+                "id_do_vehicle_model": 2,
+                "name": "essence",
+                "count": 2
+            },
+            {
+                "id_do_vehicle_engine": 1,
+                "id_do_vehicle_model": 1,
+                "name": "turbo",
+                "count": 1
+            }
+        ],
+        "familles": [
+            {
+                "id_do_product_family": 1,
+                "id_parent": null,
+                "name": "Accessoires",
+                "count": 1
+            },
+            {
+                "id_do_product_family": 3,
+                "id_parent": null,
+                "name": "Carrosserie",
+                "count": 2
+            },
+            {
+                "id_do_product_family": 5,
+                "id_parent": null,
+                "name": "Éclairage",
+                "count": 1
+            },
+            {
+                "id_do_product_family": 2,
+                "id_parent": null,
+                "name": "Look & Covering",
+                "count": 1
+            },
+            {
+                "id_do_product_family": 11,
+                "id_parent": 4,
+                "name": "Downpipe",
+                "count": 1
+            }
+        ]
+    }
+]

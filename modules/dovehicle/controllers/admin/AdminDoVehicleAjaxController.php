@@ -172,7 +172,7 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
 
             $id_product = (int) Tools::getValue('id_product', 0); 
             $compatJson = Tools::getValue('compat', '{}');
-            
+
             $compat = json_decode($compatJson, true);
 
             if ($id_product <= 0) {
@@ -189,7 +189,7 @@ class AdminDoVehicleAjaxController extends ModuleAdminController
                 array_merge($compat, ['id_product' => $id_product])
             );
 
-            $this->dieWithJson(['success' => 'ok', 'id' => $createdId]);
+            $this->dieWithJson(['success' => 'ok', 'id_compat' => $createdId]);
         }
 
     // ─── Helpers ─────────────────────────────────────────────────────────────
